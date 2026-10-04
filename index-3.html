@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="es-GT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>URNA+ | Test político para votar con criterio</title>
+<meta name="description" content="URNA+: el test político chapín para jóvenes de 18 a 35. Descubrí tu brújula política y tus 3 temas top antes de las elecciones 2027.">
+<meta name="theme-color" content="#FF8566">
+<meta property="og:title" content="URNA+ | Votá con criterio">
+<meta property="og:description" content="El test político chapín: descubrí tu brújula política y tus 3 temas top antes de las elecciones 2027.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 2h6v7h7v6h-7v7H9v-7H2V9h7z' fill='%23FF8566' stroke='%230F0A06' stroke-width='1.6'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Bebas+Neue&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F2EDE0;
+  --card:#FFFCF4;
+  --ink:#0F0A06;
+  --muted:#5E544B;
+  --pink:#FF8566;
+  --pink-2:#FFD5C8;
+  --coral:#E8503A;
+  --yellow:#F0C030;
+  --blue:#003F8A;
+  --on-color:#0F0A06;
+  --line:2.5px;
+  --shadow:6px 6px 0 var(--ink);
+  --display:"Bebas Neue", Impact, "Arial Narrow Bold", sans-serif;
+  --body:"Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --stamp:"Courier Prime", "Courier New", Courier, monospace;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#18110E; --card:#241A15; --ink:#F2EDE0; --muted:#BDB1A3; --pink-2:#5A2A1E;
+  }
+}
+:root[data-theme="dark"]{ --paper:#18110E; --card:#241A15; --ink:#F2EDE0; --muted:#BDB1A3; --pink-2:#5A2A1E; }
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px);scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:1.2rem;line-height:1.4;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,svg{max-width:100%}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--pink);outline-offset:3px}
+.wrap{width:min(1120px,100% - 2.5rem);margin-inline:auto}
+.dots{background-image:radial-gradient(var(--ink) 1.1px,transparent 1.5px);background-size:7px 7px;opacity:.16}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:.92;letter-spacing:.01em;margin:0}
+h2{font-size:clamp(2.6rem,7vw,4.6rem)}
+p{margin:0 0 .8em}
+
+/* ---------- Window component ---------- */
+.win{background:var(--card);border:var(--line) solid var(--ink);border-radius:12px;box-shadow:var(--shadow);overflow:hidden;position:relative}
+.win-bar{display:flex;align-items:center;gap:7px;padding:8px 12px;border-bottom:var(--line) solid var(--ink);background:var(--pink-2);font-family:var(--stamp);font-size:.85rem}
+.win-bar i{width:12px;height:12px;border-radius:50%;border:2px solid var(--ink);flex:none}
+.win-bar i:nth-child(1){background:var(--coral)}
+.win-bar i:nth-child(2){background:var(--yellow)}
+.win-bar i:nth-child(3){background:var(--paper)}
+.win-bar span{margin-left:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.win-body{padding:1.2rem 1.3rem}
+
+/* ---------- Buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--display);font-size:1.6rem;letter-spacing:.03em;padding:.55rem 1.3rem .45rem;border:var(--line) solid var(--ink);border-radius:999px;background:var(--pink);color:var(--on-color);box-shadow:4px 4px 0 var(--ink);text-decoration:none;transition:transform .12s, box-shadow .12s}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.btn.ghost{background:var(--card);color:var(--ink)}
+.btn.yellow{background:var(--yellow)}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none;box-shadow:4px 4px 0 var(--ink)}
+
+/* ---------- Top bar ---------- */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--paper);border-bottom:var(--line) solid var(--ink)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;height:62px}
+.logo{display:flex;align-items:center;gap:.35rem;font-family:var(--display);font-size:2.1rem;text-decoration:none;line-height:1}
+.logo svg{width:26px;height:26px}
+.top nav{display:flex;gap:1.4rem;align-items:center;font-weight:600;font-size:1.1rem}
+.top nav a{text-decoration:none}
+.top nav a:hover{text-decoration:underline;text-decoration-thickness:3px;text-decoration-color:var(--pink)}
+.top .btn{font-size:1.25rem;padding:.35rem 1rem .25rem}
+body:not(.at-home) .top nav{display:none}
+@media (max-width:760px){.top nav a:not(.btn){display:none}}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;padding:3.5rem 0 4.5rem;overflow:hidden}
+.hero .dots{position:absolute;inset:0;pointer-events:none}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:3rem;align-items:center}
+.hero h1{font-size:clamp(4.2rem,13vw,9.5rem);line-height:.84}
+.hero h1 .plus{color:var(--pink);-webkit-text-stroke:3px var(--ink);paint-order:stroke fill}
+.hero .lead{font-size:clamp(1.45rem,3vw,1.9rem);font-weight:600;line-height:1.15;margin:1.2rem 0 1.6rem;max-width:22ch}
+.hero .lead em{font-style:normal;background:var(--yellow);color:var(--on-color);padding:0 .2em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.hero .cta{display:flex;flex-wrap:wrap;gap:1rem;align-items:center}
+.hero .fine{font-family:var(--stamp);font-size:.95rem;color:var(--muted);margin-top:1.1rem}
+.collage{position:relative;height:460px}
+.collage .win{position:absolute}
+.c1{width:62%;left:4%;top:8%;transform:rotate(-5deg)}
+.c2{width:46%;right:0;top:0;transform:rotate(6deg)}
+.c3{width:58%;right:6%;bottom:2%;transform:rotate(-2deg)}
+.c1 .win-body{background:var(--pink);height:200px;display:grid;place-items:center}
+.c2 .win-body{background:var(--yellow);height:150px;display:grid;place-items:center;font-family:var(--display);font-size:7rem;line-height:1;color:var(--on-color)}
+.c3 .win-body{display:grid;grid-template-columns:auto 1fr;gap:.9rem;align-items:center}
+.cloud{position:absolute;width:120px;z-index:3}
+.cloud.a{left:-10px;bottom:28%}
+.cloud.b{right:-14px;top:42%;width:96px}
+.cursor{position:absolute;width:40px;left:46%;top:44%;z-index:4;transform:rotate(-10deg)}
+@media (max-width:860px){
+  .hero .wrap{grid-template-columns:1fr}
+  .collage{height:360px;max-width:460px;width:100%;margin-inline:auto}
+  .c1 .win-body{height:150px}
+  .c2 .win-body{height:110px;font-size:5rem}
+}
+
+/* ---------- Marquee ---------- */
+.ticker{border-block:var(--line) solid var(--ink);background:var(--pink);color:var(--on-color);overflow:hidden;white-space:nowrap}
+.ticker div{display:inline-block;padding:.55rem 0;font-family:var(--display);font-size:1.7rem;letter-spacing:.04em;animation:tick 38s linear infinite}
+.ticker span{margin:0 1.4rem}
+.ticker .pl{color:var(--yellow);-webkit-text-stroke:1.5px #0F0A06}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* ---------- Sections ---------- */
+section.block{padding:5rem 0}
+.sec-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:1rem 2rem;margin-bottom:2.2rem}
+.sec-head p{max-width:46ch;margin:0;font-size:1.25rem}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem}
+.step .num{font-family:var(--display);font-size:4.4rem;line-height:.8;color:var(--pink);-webkit-text-stroke:2px var(--ink);paint-order:stroke fill}
+.step h3{font-size:2rem;margin:.6rem 0 .4rem}
+.step p{margin:0;color:var(--muted)}
+@media (max-width:820px){.steps{grid-template-columns:1fr}}
+
+/* timeline */
+.cal{background:var(--ink);color:var(--paper)}
+.cal .sec-head p{color:inherit;opacity:.85}
+.countdown{font-family:var(--display);font-size:clamp(5rem,16vw,10rem);line-height:.8;color:var(--pink)}
+.tl{list-style:none;margin:2.5rem 0 0;padding:0;display:grid;grid-template-columns:repeat(5,1fr);border-top:3px dashed var(--paper)}
+.tl li{padding:1.1rem 1rem 0 0;position:relative}
+.tl li::before{content:"";position:absolute;top:-10px;left:0;width:16px;height:16px;border-radius:50%;background:var(--paper);border:3px solid var(--ink)}
+.tl li.star::before{background:var(--pink);width:22px;height:22px;top:-13px}
+.tl b{display:block;font-family:var(--display);font-size:1.9rem;font-weight:400;line-height:1}
+.tl span{font-size:1.05rem;opacity:.85;display:block;margin-top:.3rem}
+.note-chip{display:inline-block;margin-top:2.2rem;background:var(--yellow);color:var(--on-color);padding:.4rem .9rem;border-radius:6px;font-weight:600;transform:rotate(-1deg)}
+@media (max-width:820px){
+  .tl{grid-template-columns:1fr;border-top:0;border-left:3px dashed var(--paper);padding-left:1.4rem}
+  .tl li{padding:0 0 1.4rem}
+  .tl li::before{left:-1.4rem;margin-left:-9px;top:4px}
+  .tl li.star::before{margin-left:-12px;top:1px}
+}
+
+/* radar */
+.radar-tools{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;margin-bottom:1.6rem}
+.radar-tools input{font:inherit;font-size:1.15rem;padding:.6rem 1rem;border:var(--line) solid var(--ink);border-radius:999px;background:var(--card);color:var(--ink);min-width:min(320px,100%)}
+.radar-tools small{font-family:var(--stamp);color:var(--muted);font-size:.9rem}
+.cands{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.4rem}
+.cand .win-body{padding:1rem 1.1rem 1.1rem}
+.cand h3{font-size:2rem}
+.cand p{font-size:1.05rem;margin:.4rem 0 .9rem;color:var(--muted)}
+.lock{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--stamp);font-size:.85rem;border:2px dashed var(--ink);padding:.15rem .55rem;border-radius:5px}
+.lock svg{width:14px;height:14px}
+.src{font-family:var(--stamp);font-size:.9rem;color:var(--muted);margin-top:1.6rem}
+
+/* glossary */
+.gloss{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem 1.6rem}
+details{border:var(--line) solid var(--ink);border-radius:10px;background:var(--card);box-shadow:4px 4px 0 var(--ink)}
+summary{list-style:none;cursor:pointer;padding:.85rem 1.1rem;font-family:var(--display);font-size:1.8rem;display:flex;justify-content:space-between;align-items:center;gap:1rem}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-size:2rem;line-height:1;transition:transform .2s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{padding:0 1.1rem 1rem;margin:0}
+@media (max-width:760px){.gloss{grid-template-columns:1fr}}
+
+/* intro */
+.intro{padding:5rem 0 2rem}
+.intro .big{font-family:var(--display);font-size:clamp(2.4rem,6.4vw,4.6rem);line-height:.95;max-width:20ch;margin:0 0 1.6rem}
+.intro .big mark{background:var(--pink);color:var(--on-color);padding:0 .15em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.intro-cols{display:grid;grid-template-columns:1.2fr 1fr;gap:2rem;align-items:start}
+.intro-cols p{font-size:1.3rem;max-width:56ch}
+.facts{display:grid;gap:.8rem}
+.fact{display:grid;grid-template-columns:44px 1fr;gap:.8rem;align-items:center;border:var(--line) solid var(--ink);border-radius:10px;background:var(--card);padding:.7rem .9rem;box-shadow:4px 4px 0 var(--ink)}
+.fact .ico{width:44px;height:44px;border:2px solid var(--ink);border-radius:10px;display:grid;place-items:center;background:var(--pink);color:var(--on-color)}
+.fact .ico svg{width:24px;height:24px}
+.fact b{font-family:var(--display);font-weight:400;font-size:1.6rem;line-height:1;display:block}
+.fact span{font-size:1.05rem;color:var(--muted)}
+@media (max-width:820px){.intro-cols{grid-template-columns:1fr}}
+/* padron band */
+.padron{padding:2.5rem 0}
+.padron .win-bar{background:var(--yellow)}
+.padron .win-body{display:grid;grid-template-columns:auto 1fr auto;gap:1.4rem;align-items:center}
+.padron .id{width:96px;height:64px;border:var(--line) solid var(--ink);border-radius:8px;background:var(--pink-2);position:relative}
+.padron .id::before{content:"";position:absolute;left:10px;top:12px;width:26px;height:34px;border-radius:6px;background:var(--pink);border:2px solid var(--ink)}
+.padron .id::after{content:"";position:absolute;left:44px;top:16px;width:40px;height:6px;border-radius:3px;background:var(--ink);box-shadow:0 12px 0 var(--ink),0 24px 0 -1px var(--ink)}
+.padron h3{font-size:clamp(2.2rem,5vw,3.2rem)}
+.padron p{margin:.3rem 0 0;font-size:1.15rem}
+.padron .links{display:flex;flex-direction:column;gap:.6rem;align-items:flex-start}
+.padron .links a.linkish{font-size:1rem}
+@media (max-width:820px){.padron .win-body{grid-template-columns:1fr}.padron .id{display:none}}
+/* por que */
+.why-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:2rem;align-items:start}
+.why-grid .story p{font-size:1.25rem;max-width:56ch}
+.nolist{list-style:none;margin:0;padding:0;display:grid;gap:.7rem}
+.nolist li{display:grid;grid-template-columns:30px 1fr;gap:.6rem;align-items:start;font-size:1.12rem;line-height:1.25}
+.nolist .x{width:30px;height:30px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;font-weight:700;background:var(--coral);color:var(--on-color);font-size:1rem}
+.nolist .ok{background:var(--yellow)}
+.team{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0 1.2rem}
+.team span{border:2px solid var(--ink);border-radius:999px;padding:.15rem .8rem;font-weight:600;background:var(--card)}
+@media (max-width:820px){.why-grid{grid-template-columns:1fr}}
+/* mapa */
+.mapa{background:var(--pink-2)}
+.map-tools{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;margin-bottom:1.4rem}
+select{font:inherit;font-size:1.1rem;padding:.5rem 1rem;border:var(--line) solid var(--ink);border-radius:999px;background:var(--card);color:var(--ink)}
+.map-count{font-family:var(--display);font-size:1.8rem}
+.map-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:1.6rem;align-items:start}
+@media (max-width:900px){.map-grid{grid-template-columns:1fr}}
+.bubbles{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.6rem;min-height:340px;padding:1rem .4rem}
+.bub{border-radius:50%;border:var(--line) solid var(--ink);background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;line-height:1.02;padding:.4rem;box-shadow:3px 3px 0 var(--ink);transition:width .5s, height .5s}
+.bub svg{width:22%;max-width:34px;min-width:16px;height:auto;aspect-ratio:1}
+.bub b{font-family:var(--display);font-weight:400}
+.bub small{font-weight:700}
+.bub.r1{background:var(--pink);color:var(--on-color)}
+.bub.r2{background:var(--yellow);color:var(--on-color)}
+.bub.r3{background:var(--paper)}
+.empty{text-align:center;max-width:40ch;margin:auto;font-size:1.15rem}
+.optin{display:grid;gap:.8rem}
+.optin .row{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center}
+footer{border-top:var(--line) solid var(--ink);padding:2.5rem 0 3rem;font-size:1.05rem}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1.5rem}
+footer p{max-width:58ch;color:var(--muted)}
+
+/* ================== GAME ================== */
+.screen{display:none}
+.screen.on{display:block}
+#game,#budget,#results{min-height:calc(100dvh - 64px);padding:1.5rem 0 3rem;position:relative}
+.ballot{display:grid;grid-template-columns:repeat(20,1fr);gap:4px;margin:0 auto 1.4rem;max-width:640px}
+.ballot b{aspect-ratio:1;border:2px solid var(--ink);border-radius:3px;background:var(--card);position:relative;display:block}
+.ballot b.cur{background:var(--yellow)}
+.ballot b.done::before,.ballot b.done::after{content:"";position:absolute;left:50%;top:50%;width:120%;height:3px;background:var(--pink);border-radius:2px}
+.ballot b.done::before{transform:translate(-50%,-50%) rotate(45deg)}
+.ballot b.done::after{transform:translate(-50%,-50%) rotate(-45deg)}
+.game-meta{display:flex;justify-content:space-between;align-items:center;max-width:640px;margin:0 auto .8rem;font-family:var(--stamp);font-size:.95rem}
+.stage{max-width:640px;margin:0 auto;position:relative;perspective:900px}
+.qcard{touch-action:pan-y;user-select:none;-webkit-user-select:none;will-change:transform}
+.qcard .win-bar{background:var(--pink)}
+.qcard .win-bar span{color:var(--on-color)}
+.chip{display:inline-flex;align-items:center;gap:.4rem;border:2px solid var(--ink);border-radius:999px;padding:.15rem .7rem .15rem .45rem;font-weight:700;font-size:1rem;background:var(--yellow);color:var(--on-color)}
+.chip svg{width:18px;height:18px}
+.qtext{font-weight:700;font-size:clamp(1.65rem,4.6vw,2.2rem);line-height:1.12;margin:1rem 0 .4rem;min-height:4.6em}
+.swipe-hint{font-family:var(--stamp);font-size:.85rem;color:var(--muted);margin:0}
+@media (hover:none){.swipe-hint .keys{display:none}}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem;margin-top:1.2rem}
+.scale button{border:var(--line) solid var(--ink);border-radius:12px;background:var(--card);padding:.6rem .2rem .5rem;display:flex;flex-direction:column;align-items:center;gap:.2rem;font-weight:700;font-size:.98rem;line-height:1.05;box-shadow:3px 3px 0 var(--ink);transition:transform .1s, background .15s}
+.scale button .e{width:36px;height:36px;display:block}
+.scale button:hover{background:var(--pink-2)}
+.scale button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.scale button.sel{background:var(--pink);color:var(--on-color)}
+.tools{display:flex;justify-content:space-between;gap:.6rem;margin-top:1.1rem;flex-wrap:wrap}
+.tool{border:2px solid var(--ink);background:transparent;border-radius:999px;padding:.35rem .9rem;font-weight:700;font-size:1.05rem;display:inline-flex;gap:.35rem;align-items:center}
+.tool svg{width:20px;height:20px;flex:none}
+.tool[aria-pressed="true"]{background:var(--coral);color:var(--on-color);--flame:var(--yellow)}
+.tool:disabled{opacity:.35;cursor:default}
+.postit{position:absolute;inset:auto 1rem 1rem 1rem;background:var(--yellow);color:var(--on-color);border:var(--line) solid #0F0A06;padding:1.1rem 1.2rem 1rem;box-shadow:5px 5px 0 #0F0A06;transform:rotate(-1.5deg) translateY(10px);opacity:0;pointer-events:none;transition:opacity .2s, transform .25s;z-index:5;font-size:1.12rem;line-height:1.3;max-height:calc(100% - 2rem);overflow:auto}
+.postit.on{opacity:1;transform:rotate(-1.5deg) translateY(0);pointer-events:auto}
+.postit h4{font-family:var(--display);font-weight:400;font-size:1.7rem;margin:0 0 .3rem;padding-right:2.4rem}
+.postit p{margin:0 0 .6rem}
+.postit .close{position:absolute;top:.4rem;right:.5rem;border:2px solid #0F0A06;background:var(--card);color:var(--ink);border-radius:50%;width:32px;height:32px;font-size:1.1rem;line-height:1}
+.stampmark{position:absolute;left:50%;top:42%;z-index:6;font-family:var(--display);font-size:clamp(3rem,10vw,4.6rem);color:var(--coral);border:6px double var(--coral);border-radius:10px;padding:.1rem 1rem 0;transform:translate(-50%,-50%) rotate(-12deg) scale(2.2);opacity:0;pointer-events:none;white-space:nowrap;background:color-mix(in srgb,var(--card) 70%,transparent)}
+.stampmark.hit{animation:stamp .38s cubic-bezier(.2,1.6,.4,1) forwards}
+@keyframes stamp{to{transform:translate(-50%,-50%) rotate(-12deg) scale(1);opacity:1}}
+.drag-label{position:absolute;top:1.2rem;z-index:6;font-family:var(--display);font-size:2.4rem;padding:.1rem .8rem 0;border:4px solid;border-radius:8px;opacity:0;pointer-events:none}
+.drag-label.yes{right:1rem;color:var(--pink);transform:rotate(10deg)}
+.drag-label.no{left:1rem;color:var(--coral);transform:rotate(-10deg)}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 1.4rem);transform:translate(-50%,calc(100% + 4rem));visibility:hidden;text-align:center;line-height:1.05;background:var(--ink);color:var(--paper);font-family:var(--display);font-size:1.7rem;padding:.55rem 1.3rem .4rem;border-radius:999px;z-index:60;transition:transform .35s cubic-bezier(.2,1.4,.4,1);max-width:min(92vw,520px);width:max-content}
+.toast.on{transform:translate(-50%,0);visibility:visible}
+.game-top{display:flex;justify-content:space-between;align-items:center;max-width:640px;margin:0 auto 1rem}
+.linkish{background:none;border:0;font-weight:700;text-decoration:underline;text-decoration-thickness:2px;padding:.2rem 0;font-size:1.05rem}
+
+/* ---------- Budget ---------- */
+.b-head{text-align:center;max-width:640px;margin:0 auto 1.6rem}
+.b-head h2{font-size:clamp(2.8rem,8vw,4.4rem)}
+.b-head p{font-size:1.25rem;margin-top:.6rem}
+.purse{position:sticky;top:calc(env(safe-area-inset-top,0px) + 70px);z-index:10;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.6rem 1.2rem;background:var(--ink);color:var(--paper);border-radius:999px;padding:.6rem 1.2rem;width:max-content;max-width:100%;margin:0 auto 1.8rem}
+.purse .coins{display:flex;gap:4px}
+.coin{width:20px;height:20px;border-radius:50%;background:var(--yellow);border:2px solid #0F0A06;box-shadow:inset -3px -3px 0 rgba(0,0,0,.18);display:inline-block}
+.coin.spent{background:transparent;border-color:var(--paper);border-style:dashed;box-shadow:none;opacity:.5}
+.purse b{font-family:var(--display);font-weight:400;font-size:1.6rem;line-height:1}
+.bgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.2rem}
+@media (max-width:900px){.bgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:440px){.bgrid{gap:.8rem}}
+.btile{overflow:visible}
+.btile .win-bar{border-radius:9px 9px 0 0}
+.btile .win-body{padding:.9rem .9rem 1rem;display:block}
+.btile .win-body > * + *{margin-top:.5rem}
+.btile .ico{width:42px;height:42px;border:2px solid var(--ink);border-radius:10px;display:grid;place-items:center;background:var(--pink-2)}
+.btile .ico svg{width:24px;height:24px}
+.btile h3{font-size:1.65rem;overflow-wrap:anywhere;hyphens:auto}
+.btile small{display:block;color:var(--muted);line-height:1.15;font-size:.98rem;min-height:2.3em}
+.stack{display:flex;flex-wrap:wrap;gap:3px;min-height:22px}
+.bctrl{display:flex;align-items:center;justify-content:space-between;gap:.5rem;padding:.35rem;border:2px dashed var(--ink);border-radius:999px;margin-top:.8rem !important}
+.bctrl button{width:42px;height:42px;border-radius:50%;border:var(--line) solid var(--ink);background:var(--card);font-family:var(--display);font-size:1.8rem;line-height:1;box-shadow:2px 2px 0 var(--ink)}
+.bctrl button.plus{background:var(--pink);color:var(--on-color)}
+.bctrl button:disabled{opacity:.3}
+.bctrl output{font-family:var(--display);font-size:1.5rem;white-space:nowrap;min-width:0}
+.bctrl button{flex:none}
+@media (max-width:440px){.bctrl{padding:.25rem;gap:.2rem}.bctrl button{width:36px;height:36px;font-size:1.5rem}.bctrl output{font-size:1.1rem}.btile .win-body{padding:.75rem .7rem .9rem}}
+.b-cta{display:flex;justify-content:center;margin-top:2.2rem}
+
+/* ---------- Results ---------- */
+.acta-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.8rem}
+.acta-head h2{font-size:clamp(3rem,9vw,5.4rem)}
+.seal{font-family:var(--stamp);font-weight:700;border:3px solid var(--coral);color:var(--coral);padding:.35rem .8rem;transform:rotate(-4deg);border-radius:6px;font-size:1rem;text-align:center;line-height:1.2}
+.rgrid{display:grid;grid-template-columns:1.05fr .95fr;gap:1.8rem;align-items:start}
+@media (max-width:900px){.rgrid{grid-template-columns:1fr}}
+.compass-wrap{display:grid;grid-template-columns:1fr;gap:1rem}
+.compass svg{width:100%;height:auto;display:block}
+.qname{font-size:clamp(2.2rem,6vw,3.2rem);margin:.4rem 0 .5rem}
+.bars{display:grid;gap:.9rem;margin:1rem 0 .4rem}
+.bar .lbl{display:flex;justify-content:space-between;font-weight:700;font-size:1rem}
+.bar .track{height:16px;border:2px solid var(--ink);border-radius:999px;position:relative;background:var(--card);margin-top:.25rem}
+.bar .track::after{content:"";position:absolute;left:50%;top:-4px;bottom:-4px;width:2px;background:var(--ink)}
+.bar .fill{position:absolute;top:0;bottom:0;background:var(--pink);border-radius:999px}
+.podium{display:grid;gap:1rem}
+.pod{display:grid;grid-template-columns:auto 1fr;gap:1rem;align-items:start;border-bottom:2px dashed var(--ink);padding-bottom:1rem}
+.pod:last-child{border-bottom:0;padding-bottom:0}
+.pod .rank{font-family:var(--display);font-size:3.6rem;line-height:.8;width:2.2rem;color:var(--pink);-webkit-text-stroke:2px var(--ink);paint-order:stroke fill}
+.pod h3{font-size:2rem;display:flex;align-items:center;gap:.5rem}
+.pod h3 svg{width:24px;height:24px}
+.pod .why{font-family:var(--stamp);font-size:.9rem;color:var(--muted);margin:.2rem 0 .5rem}
+.pod ul{margin:0;padding-left:1.1rem}
+.pod li{margin-bottom:.3rem;font-size:1.08rem}
+.locked{background:repeating-linear-gradient(-45deg,var(--card) 0 14px,var(--pink-2) 14px 28px)}
+.locked .win-body{display:grid;grid-template-columns:auto 1fr;gap:1rem;align-items:center}
+.padlock{width:64px;height:64px;border:var(--line) solid var(--ink);border-radius:14px;background:var(--yellow);display:grid;place-items:center;color:var(--on-color)}
+.padlock svg{width:34px;height:34px}
+.r-actions{display:flex;flex-wrap:wrap;gap:1rem;margin-top:2rem}
+.learned{font-size:1.15rem}
+.learned strong{font-family:var(--display);font-weight:400;font-size:2.4rem;color:var(--pink);-webkit-text-stroke:1.5px var(--ink);paint-order:stroke fill;vertical-align:-4px}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
+  .ticker div{animation:none}
+}
+@media (max-width:480px){
+  .scale button{font-size:.85rem;padding:.5rem .1rem .45rem}
+  .scale button .e{width:30px;height:30px}
+  .win-body{padding:1rem}
+  .qtext{min-height:5.2em}
+}
+/* ================== LOADER / SPLASH ================== */
+#loader{position:fixed;inset:0;z-index:100;background:#FF8566;color:#0F0A06;display:grid;place-items:center;padding:calc(env(safe-area-inset-top,0px) + 1.5rem) 1.5rem calc(env(safe-area-inset-bottom,0px) + 1.5rem);overflow:hidden;transition:opacity .3s, visibility .3s, transform .65s cubic-bezier(.7,0,.2,1)}
+#loader::before{content:"";position:absolute;inset:0;background-image:radial-gradient(#0F0A06 1.2px,transparent 1.6px);background-size:8px 8px;opacity:.14;pointer-events:none}
+#loader.hide{opacity:0;visibility:hidden}
+#loader.exit{transform:translateY(-102%)}
+body.locked{overflow:hidden}
+.ld{position:relative;display:flex;flex-direction:column;align-items:center;gap:1.1rem;text-align:center;width:min(420px,100%)}
+.ld-logo{font-family:var(--display);font-size:clamp(5rem,22vw,8.5rem);line-height:.8;color:#F2EDE0;-webkit-text-stroke:3px #0F0A06;paint-order:stroke fill;text-shadow:6px 6px 0 #0F0A06;display:none}
+.ld-logo span{color:#F0C030;display:inline-block;animation:spin 2.4s cubic-bezier(.6,0,.3,1) infinite}
+@keyframes spin{0%,55%{transform:rotate(0)}80%,100%{transform:rotate(180deg)}}
+.ld-urna{width:132px;height:auto;overflow:visible;margin-top:2.2rem}
+.ld-ballot{animation:drop 1.1s cubic-bezier(.5,0,.6,1) infinite}
+@keyframes drop{0%{transform:translateY(-34px) rotate(-8deg);opacity:0}25%{opacity:1;transform:translateY(-22px) rotate(-4deg)}75%,100%{transform:translateY(46px) rotate(0);opacity:1}}
+.ld-win{width:100%;background:#F2EDE0;border:3px solid #0F0A06;border-radius:12px;box-shadow:6px 6px 0 #0F0A06;overflow:hidden;text-align:left}
+.ld-win .bar{display:flex;align-items:center;gap:7px;padding:7px 11px;border-bottom:3px solid #0F0A06;background:#F0C030;font-family:var(--stamp);font-size:.85rem}
+.ld-win .bar i{width:12px;height:12px;border-radius:50%;border:2px solid #0F0A06;flex:none}
+.ld-win .bar i:nth-child(1){background:#E8503A}.ld-win .bar i:nth-child(2){background:#FF8566}.ld-win .bar i:nth-child(3){background:#F2EDE0}
+.ld-body{padding:.9rem 1rem 1rem}
+.ld-msg{font-weight:700;font-size:1.25rem;margin:0 0 .6rem;min-height:1.4em}
+.ld-track{height:24px;border:3px solid #0F0A06;border-radius:6px;padding:2px;background:#FFFCF4}
+.ld-fill{height:100%;width:0;background:repeating-linear-gradient(90deg,#E8503A 0 14px,transparent 14px 18px);transition:width linear}
+.ld-pct{font-family:var(--stamp);font-size:.85rem;margin-top:.4rem;display:flex;justify-content:space-between}
+.ld-tag{font-weight:700;font-size:1.3rem;line-height:1.15;display:none}
+.ld-tag em{font-style:normal;background:#F0C030;padding:0 .2em}
+.ld-enter{display:none;font-family:var(--display);font-size:1.7rem;letter-spacing:.04em;border:3px solid #0F0A06;border-radius:999px;background:#F2EDE0;color:#0F0A06;padding:.45rem 1.4rem .3rem;box-shadow:4px 4px 0 #0F0A06;animation:blink 1.1s steps(2,start) infinite}
+@keyframes blink{50%{background:#F0C030}}
+#loader.splash .ld-logo,#loader.splash .ld-tag{display:block}
+#loader.splash .ld-urna{width:110px}
+#loader.ready .ld-enter{display:inline-block}
+#loader.ready .ld-win{display:none}
+#loader.splash{cursor:default}#loader.ready{cursor:pointer}
+@media (prefers-reduced-motion: reduce){.ld-ballot,.ld-logo span,.ld-enter{animation:none}#loader{transition:opacity .15s, visibility .15s}#loader.exit{transform:none;opacity:0;visibility:hidden}}
+.share-modal{position:fixed;inset:0;z-index:80;background:rgba(15,10,6,.55);display:grid;place-items:center;padding:calc(env(safe-area-inset-top,0px) + 1rem) 1rem calc(env(safe-area-inset-bottom,0px) + 1rem)}
+.share-modal[hidden]{display:none}
+.share-modal .win{width:min(480px,100%);max-height:100%;overflow:auto}
+.share-preview{font-family:var(--stamp);font-size:.95rem;background:var(--paper);border:2px dashed var(--ink);border-radius:8px;padding:.8rem;margin:0 0 1rem;line-height:1.35;white-space:pre-wrap;overflow-wrap:anywhere}
+.share-opts{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+.share-opts .btn{justify-content:center;font-size:1.35rem;padding:.55rem .6rem .45rem}
+.share-close{position:absolute;top:6px;right:8px;border:2px solid var(--ink);background:var(--card);color:var(--ink);border-radius:50%;width:30px;height:30px;line-height:1;font-weight:700}
+@media (max-width:380px){.share-opts{grid-template-columns:1fr}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body class="at-home locked">
+
+<div id="loader" class="splash" role="status" aria-live="polite">
+  <div class="ld">
+    <div class="ld-logo" aria-label="URNA+">URNA<span>+</span></div>
+    <svg class="ld-urna" viewBox="0 0 140 150" aria-hidden="true">
+      <g class="ld-ballot"><rect x="49" y="8" width="42" height="54" rx="3" fill="#FFFCF4" stroke="#0F0A06" stroke-width="4"/><path d="M58 20l12 12M70 20L58 32" stroke="#E8503A" stroke-width="5" stroke-linecap="round"/><rect x="58" y="42" width="24" height="5" rx="2.5" fill="#0F0A06"/></g>
+      <rect x="20" y="62" width="100" height="80" rx="6" fill="#F2EDE0" stroke="#0F0A06" stroke-width="4"/>
+      <rect x="12" y="50" width="116" height="16" rx="4" fill="#F0C030" stroke="#0F0A06" stroke-width="4"/>
+      <rect x="46" y="55" width="48" height="6" rx="3" fill="#0F0A06"/>
+      <path d="M62 88h16v10h10v14H78v10H62v-10H52V98h10z" fill="#FF8566" stroke="#0F0A06" stroke-width="3.5" stroke-linejoin="round"/>
+    </svg>
+    <p class="ld-tag">En política es fácil que te volen la canica. <em>A vos no.</em></p>
+    <div class="ld-win">
+      <div class="bar"><i></i><i></i><i></i><span id="ldFile">cargando_urna.exe</span></div>
+      <div class="ld-body">
+        <p class="ld-msg" id="ldMsg">Desempolvando la urna…</p>
+        <div class="ld-track"><div class="ld-fill" id="ldFill"></div></div>
+        <div class="ld-pct"><span>no cierres la ventana</span><span id="ldPct">0%</span></div>
+      </div>
+    </div>
+    <button class="ld-enter" id="ldEnter">Tocá en cualquier lado para entrar</button>
+  </div>
+</div>
+
+<!-- SVG icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-seguridad" viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-salud" viewBox="0 0 24 24"><path d="M9.5 3.5h5v6h6v5h-6v6h-5v-6h-6v-5h6z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-educacion" viewBox="0 0 24 24"><path d="M2 9l10-5 10 5-10 5z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M6 11v5c2 2 10 2 12 0v-5M22 9v6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-chamba" viewBox="0 0 24 24"><rect x="3" y="7.5" width="18" height="12.5" rx="2" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M9 7.5V5h6v2.5M3 13h18" fill="none" stroke="currentColor" stroke-width="2.2"/></symbol>
+    <symbol id="i-transparencia" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15 15l6 6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-migracion" viewBox="0 0 24 24"><path d="M3 11.5L21 4l-6.5 17-3-7.5z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M11.5 13.5L21 4" stroke="currentColor" stroke-width="2.2"/></symbol>
+    <symbol id="i-ambiente" viewBox="0 0 24 24"><path d="M12 3c3.5 4 6 7 6 10.5a6 6 0 01-12 0C6 10 8.5 7 12 3z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M9.5 14a2.5 2.5 0 002.5 2.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-derechos" viewBox="0 0 24 24"><circle cx="8" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="16.5" cy="9" r="2.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M2.5 20c.5-3.5 2.8-5.5 5.5-5.5s5 2 5.5 5.5M13.5 15c.9-.8 1.9-1.2 3-1.2 2.4 0 4.2 1.8 4.6 4.7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M8 10.5V7.5a4 4 0 018 0v3" fill="none" stroke="currentColor" stroke-width="2.4"/></symbol>
+    <symbol id="f-m2" viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M8.5 10.5l4 4M12.5 10.5l-4 4M19.5 10.5l4 4M23.5 10.5l-4 4M10 24.5c2.5-4.5 9.5-4.5 12 0" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+    <symbol id="f-m1" viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="11.5" cy="13.5" r="1.8" fill="currentColor"/><circle cx="20.5" cy="13.5" r="1.8" fill="currentColor"/><path d="M8.5 9.5l5 1.5M11.5 23c2.5-2.5 6.5-2.5 9 0" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+    <symbol id="f-0" viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="11.5" cy="13.5" r="1.8" fill="currentColor"/><circle cx="20.5" cy="13.5" r="1.8" fill="currentColor"/><path d="M11 21.5h10" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+    <symbol id="f-p1" viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="11.5" cy="13.5" r="1.8" fill="currentColor"/><circle cx="20.5" cy="13.5" r="1.8" fill="currentColor"/><path d="M10.5 19.5c2.5 3.5 8.5 3.5 11 0" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+    <symbol id="f-p2" viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M8.5 14c1.5-2.5 4-2.5 5.5 0M18 14c1.5-2.5 4-2.5 5.5 0" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M9.5 18.5h13c0 4-2.9 7-6.5 7s-6.5-3-6.5-7z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-question" viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M12.2 12.5a3.8 3.8 0 0 1 7.6 0c0 2.8-3.8 2.8-3.8 5.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><circle cx="16" cy="23" r="1.8" fill="currentColor"/></symbol>
+    <symbol id="i-flame" viewBox="0 0 32 32"><path d="M16 3.5c1 5.5 7.5 7.5 7.5 15a7.5 7.5 0 0 1-15 0c0-4.2 2.6-6.6 4.2-8.6.4 2.6 1.6 3.9 3.2 4.6-1-4.5 0-7.8.1-11z" fill="var(--flame,none)" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/></symbol>
+    <symbol id="i-back" viewBox="0 0 32 32"><path d="M19 8l-8 8 8 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path fill="currentColor" stroke="#0F0A06" stroke-width="1.6" stroke-linejoin="round" d="M9 2h6v7h7v6h-7v7H9v-7H2V9h7z"/></symbol>
+  </defs>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <a href="#" class="logo" data-go="home" aria-label="URNA+ inicio">URNA<svg aria-hidden="true" style="color:var(--pink)"><use href="#i-plus"/></svg></a>
+    <nav aria-label="Principal">
+      <a href="#que-es" data-go="home">Qué es</a>
+      <a href="#mapa" data-go="home">Mapa</a>
+      <a href="#radar" data-go="home">Radar 2027</a>
+      <a href="#por-que" data-go="home">Quiénes somos</a>
+      <button class="btn" data-start>Hacer el test</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+<!-- ================= HOME ================= -->
+<div id="home" class="screen on">
+  <section class="hero">
+    <div class="dots"></div>
+    <div class="wrap">
+      <div>
+        <h1>URNA<span class="plus">+</span></h1>
+        <p class="lead">En política es fácil que te volen la canica. <em>A vos no.</em></p>
+        <p style="max-width:44ch;font-size:1.25rem">Un test que se juega como app: deslizá, sellá y repartí el pisto del país. Al final sabés dónde estás parado y cuáles son tus 3 temas que no negociás.</p>
+        <div class="cta">
+          <button class="btn" data-start>Empezar el test</button>
+          <button class="btn ghost" id="lastActa" hidden>Ver mi última acta</button>
+        </div>
+        <p class="fine">20 preguntas, 3 minutos y cero sermón. No te pedimos datos.</p>
+      </div>
+      <div class="collage" aria-hidden="true">
+        <div class="win c1">
+          <div class="win-bar"><i></i><i></i><i></i><span>boleta.exe</span></div>
+          <div class="win-body">
+            <svg viewBox="0 0 200 140" width="230">
+              <rect x="30" y="18" width="140" height="104" rx="6" fill="#FFFCF4" stroke="#0F0A06" stroke-width="4"/>
+              <rect x="48" y="38" width="30" height="30" fill="none" stroke="#0F0A06" stroke-width="4"/>
+              <path d="M52 42l22 22M74 42L52 64" stroke="#E8503A" stroke-width="6" stroke-linecap="round"/>
+              <rect x="92" y="44" width="60" height="8" rx="4" fill="#0F0A06"/>
+              <rect x="92" y="58" width="42" height="6" rx="3" fill="#0F0A06" opacity=".4"/>
+              <rect x="48" y="84" width="30" height="24" fill="none" stroke="#0F0A06" stroke-width="4"/>
+              <rect x="92" y="90" width="54" height="8" rx="4" fill="#0F0A06" opacity=".4"/>
+            </svg>
+          </div>
+        </div>
+        <div class="win c2">
+          <div class="win-bar"><i></i><i></i><i></i><span>¿y vos?</span></div>
+          <div class="win-body">?</div>
+        </div>
+        <div class="win c3">
+          <div class="win-bar"><i></i><i></i><i></i><span>acta_levantada.txt</span></div>
+          <div class="win-body">
+            <svg viewBox="0 0 80 80" width="74"><rect x="3" y="3" width="74" height="74" fill="none" stroke="currentColor" stroke-width="3"/><path d="M40 3v74M3 40h74" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4"/><circle cx="27" cy="52" r="7" fill="#FF8566" stroke="currentColor" stroke-width="3"/></svg>
+            <div style="font-size:1.05rem;line-height:1.2"><b style="font-family:var(--display);font-size:1.6rem;font-weight:400">Tu brújula</b><br>y tus 3 temas top, en una sola acta.</div>
+          </div>
+        </div>
+        <svg class="cloud a" viewBox="0 0 120 70"><path d="M20 58c-12 0-16-16-4-20-2-14 16-20 24-10 4-14 26-16 30-2 10-6 24 2 20 14 12 2 12 18 0 18z" fill="#FFFCF4" stroke="#0F0A06" stroke-width="3.5" stroke-linejoin="round"/></svg>
+        <svg class="cloud b" viewBox="0 0 120 70"><path d="M20 58c-12 0-16-16-4-20-2-14 16-20 24-10 4-14 26-16 30-2 10-6 24 2 20 14 12 2 12 18 0 18z" fill="#FFFCF4" stroke="#0F0A06" stroke-width="3.5" stroke-linejoin="round"/></svg>
+        <svg class="cursor" viewBox="0 0 40 48"><path d="M4 3l30 22-13 2 8 16-6 3-8-16-11 9z" fill="#FFFCF4" stroke="#0F0A06" stroke-width="3" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker" aria-hidden="true"><div id="tickerText"></div></div>
+
+  <section class="intro" id="que-es">
+    <div class="wrap">
+      <p class="big">URNA+ te explica la política en buen chapín: <mark>claro, directo y sin rollos.</mark></p>
+      <div class="intro-cols">
+        <div>
+          <p>Somos una plataforma de alfabetización política para jóvenes de 18 a 35 años en Guatemala. No venimos a decirte por quién votar: venimos a que llegués a la urna sabiendo qué pensás, qué te importa y qué tenés que exigirle a quien te pida el voto.</p>
+          <p>Ni votar por votar, ni anular por cansancio. Votar con criterio.</p>
+          <a href="#por-que" class="linkish">¿Y quién está detrás? Spoiler: ningún partido.</a>
+        </div>
+        <div class="facts">
+          <div class="fact"><div class="ico"><svg aria-hidden="true"><use href="#i-plus"/></svg></div><div><b>Test que se juega</b><span>Tu brújula política y tu top 3 de temas en 3 minutos.</span></div></div>
+          <div class="fact"><div class="ico"><svg aria-hidden="true"><use href="#i-derechos"/></svg></div><div><b>Mapa de intereses</b><span>Mirá qué le importa a la gente joven del país, en vivo.</span></div></div>
+          <div class="fact"><div class="ico"><svg aria-hidden="true"><use href="#i-educacion"/></svg></div><div><b>Política sin tecnicismos</b><span>Explicaciones cortas, con las dos posturas, sin jalar para ningún lado.</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="padron">
+    <div class="wrap">
+      <div class="win">
+        <div class="win-bar"><i></i><i></i><i></i><span>padron_electoral.pdf</span></div>
+        <div class="win-body">
+          <div class="id" aria-hidden="true"></div>
+          <div>
+            <h3>¿Estás empadronado?</h3>
+            <p>Si no estás en el padrón, no votás, aunque tengás DPI. Revisalo en un minuto con tu número de DPI. El padrón se cierra el 22 de enero de 2027.</p>
+          </div>
+          <div class="links">
+            <a class="btn" href="https://tse.org.gt/reg-ciudadanos/sistema-de-estadisticas/consulta-de-afiliacion" target="_blank" rel="noopener">Revisar en el TSE ↗</a>
+            <a class="linkish" href="https://tse.org.gt/reg-ciudadanos/jornadas-de-empadronamiento" target="_blank" rel="noopener">¿No estás? Mirá las jornadas de empadronamiento ↗</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="como">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Así se juega</h2>
+        <p>No te vamos a decir por quién votar. Te ayudamos a saber qué pensás y qué exigir.</p>
+      </div>
+      <div class="steps">
+        <div class="win step"><div class="win-bar"><i></i><i></i><i></i><span>paso_1</span></div><div class="win-body"><div class="num">1</div><h3>Sellá 20 expedientes</h3><p>Una frase por tarjeta. Tocá un sello o deslizá: derecha si estás de acuerdo, izquierda si no. ¿No entendés algo? Dale a “¿Ni idea?” y te lo explicamos sin rollo.</p></div></div>
+        <div class="win step"><div class="win-bar"><i></i><i></i><i></i><span>paso_2</span></div><div class="win-body"><div class="num">2</div><h3>Sé presi por un día</h3><p>Tenés Q1,000 millones extra para repartir entre 8 temas. Donde ponés el pisto se nota qué te importa de verdad.</p></div></div>
+        <div class="win step"><div class="win-bar"><i></i><i></i><i></i><span>paso_3</span></div><div class="win-body"><div class="num">3</div><h3>Levantá tu acta</h3><p>Tu brújula política, tu top 3 de temas y las preguntas que tenés que hacerle a cada candidatura antes de marcar la boleta.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block mapa" id="mapa">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Mapa de intereses</h2>
+        <p>Cada burbuja crece según cuánta gente la puso en su top 3. Es anónimo: solo guardamos tus 3 temas, tu punto en la brújula y, si querés, tu departamento.</p>
+      </div>
+      <div class="map-tools">
+        <span class="map-count" id="mapCount">Cargando el mapa…</span>
+        <label class="sr" for="depFilter">Filtrar por departamento</label>
+        <select id="depFilter"><option value="">Todo el país</option></select>
+      </div>
+      <div class="map-grid">
+        <div class="win"><div class="win-bar"><i></i><i></i><i></i><span>lo_que_nos_importa.svg</span></div><div class="win-body bubbles" id="bubbles"></div></div>
+        <div class="win"><div class="win-bar"><i></i><i></i><i></i><span>brujula_colectiva.svg</span></div><div class="win-body"><svg id="crowd" viewBox="0 0 320 320" role="img" aria-label="Brújula colectiva"></svg><p style="font-family:var(--stamp);font-size:.9rem;color:var(--muted);margin:.6rem 0 0">Cada punto es alguien. El tuyo es el más grande.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block cal" id="calendario">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <div class="countdown" id="days">000</div>
+          <h2 style="color:var(--paper)">días para ir a votar</h2>
+        </div>
+        <p>El domingo 27 de junio de 2027 se elige presidencia, Congreso, alcaldías y Parlacen. Estas son las fechas del cronograma preliminar del TSE.</p>
+      </div>
+      <ol class="tl">
+        <li><b>22 ene</b><span>El TSE convoca a elecciones y se cierra el padrón.</span></li>
+        <li><b>23 ene–28 mar</b><span>Partidos y comités inscriben candidaturas.</span></li>
+        <li><b>29 mar</b><span>Arranca la campaña. Ojo con la desinformación.</span></li>
+        <li class="star"><b>27 jun</b><span>Primera vuelta. Ley seca del 26 al 28.</span></li>
+        <li><b>22 ago</b><span>Segunda vuelta, si nadie pasa del 50%.</span></li>
+      </ol>
+      <a class="note-chip" href="https://tse.org.gt/reg-ciudadanos/sistema-de-estadisticas/consulta-de-afiliacion" target="_blank" rel="noopener">¿Estás empadronado? Revisalo en el TSE antes del 22 de enero ↗</a>
+    </div>
+  </section>
+
+  <section class="block" id="radar">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Radar 2027</h2>
+        <p>Nombres que se perfilan según reportes de prensa. Nada es oficial hasta que el TSE inscriba candidaturas, así que el match con candidatos se desbloquea cuando publiquen sus planes de gobierno.</p>
+      </div>
+      <div class="radar-tools">
+        <label class="sr" for="q">Buscar por nombre o partido</label>
+        <input id="q" type="search" placeholder="Buscá por nombre o partido">
+        <small>Orden alfabético por apellido. Mismo espacio para todos. Nadie paga por salir aquí.</small>
+      </div>
+      <div class="cands" id="cands"></div>
+      <p class="src">Fuentes: Infobae, “Las candidaturas que se perfilan para Guatemala 2027” (28/07/2026); cronograma preliminar del TSE (junio 2026). Última revisión: octubre 2026.</p>
+    </div>
+  </section>
+
+  <section class="block" id="por-que">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>¿Por qué existe URNA+?</h2>
+        <p>Porque alguien nos iba a preguntar “¿y ustedes de qué partido son?”. De ninguno. Aquí va la historia completa.</p>
+      </div>
+      <div class="why-grid">
+        <div class="story">
+          <p>URNA+ nació como un proyecto universitario y decidimos tomárnoslo en serio hasta convertirlo en un producto real. Nos movió algo sencillo: en la primera vuelta de 2023 el voto nulo le ganó a todas las candidaturas. No creemos que sea falta de opinión. Creemos que es falta de información clara, dicha en nuestro idioma.</p>
+          <p>Lo hacemos un equipo de siete personas de disciplinas que se complementan:</p>
+          <div class="team"><span>Programación</span><span>Psicología</span><span>Sociología</span><span>Relaciones internacionales</span><span>Comunicación</span></div>
+          <p>Hasta el color lo pensamos: escogimos el salmón porque ningún partido lo usa.</p>
+        </div>
+        <div class="win">
+          <div class="win-bar"><i></i><i></i><i></i><span>reglas_de_la_casa.txt</span></div>
+          <div class="win-body">
+            <ul class="nolist">
+              <li><span class="x">✕</span>No somos de ningún partido, comité cívico ni candidatura.</li>
+              <li><span class="x">✕</span>No recibimos pisto de campañas ni de quienes buscan un cargo.</li>
+              <li><span class="x">✕</span>No te decimos por quién votar. Nunca.</li>
+              <li><span class="x">✕</span>No te pedimos nombre, correo ni DPI para hacer el test.</li>
+              <li><span class="x ok">✓</span>Citamos nuestras fuentes y damos el mismo espacio a todas las candidaturas.</li>
+              <li><span class="x ok">✓</span>Si ves un dato malo o algo que jala para un lado, avisanos y lo corregimos.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="diccionario" style="padding-top:1rem">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Diccionario de bolsillo</h2>
+        <p>Las palabras que van a sonar todo 2027, explicadas como te las explicaría tu cuate que sí le sabe.</p>
+      </div>
+      <div class="gloss" id="gloss"></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <a href="#" class="logo" data-go="home">URNA<svg aria-hidden="true" style="color:var(--pink)"><use href="#i-plus"/></svg></a>
+      <p>URNA+ no es de ningún partido ni recibe fondos de campañas. Si ves un dato malo, avisanos y lo corregimos. <a href="https://tse.org.gt/reg-ciudadanos/sistema-de-estadisticas/consulta-de-afiliacion" target="_blank" rel="noopener">Revisá si estás empadronado ↗</a></p>
+    </div>
+  </footer>
+</div>
+
+<!-- ================= GAME ================= -->
+<div id="game" class="screen" aria-live="polite">
+  <div class="wrap">
+    <div class="game-top">
+      <button class="linkish" data-go="home">Salir</button>
+      <span style="font-family:var(--stamp);font-size:.95rem" id="counter">1 de 20</span>
+    </div>
+    <div class="ballot" id="ballot" aria-hidden="true"></div>
+    <div class="stage">
+      <div class="win qcard" id="qcard">
+        <div class="win-bar"><i></i><i></i><i></i><span id="qbar">expediente_01.doc</span></div>
+        <div class="win-body">
+          <span class="chip" id="qchip"></span>
+          <p class="qtext" id="qtext"></p>
+          <p class="swipe-hint">Deslizá la tarjeta o tocá un sello.<span class="keys"> En compu: teclas 1 a 5 o flechas.</span></p>
+          <div class="scale" id="scale" role="group" aria-label="Tu respuesta"></div>
+          <div class="tools">
+            <button class="tool" id="back"><svg aria-hidden="true"><use href="#i-back"/></svg>Regresar</button>
+            <button class="tool" id="peek"><svg aria-hidden="true"><use href="#i-question"/></svg>¿Ni idea?</button>
+            <button class="tool" id="fire" aria-pressed="false"><svg aria-hidden="true"><use href="#i-flame"/></svg>Esto me importa</button>
+          </div>
+        </div>
+        <div class="drag-label yes" id="dl-yes">¡SIMÓN!</div>
+        <div class="drag-label no" id="dl-no">¡NI DE CHISTE!</div>
+        <div class="stampmark" id="stampmark"></div>
+        <div class="postit" id="postit" role="dialog" aria-label="Explicación">
+          <button class="close" id="postClose" aria-label="Cerrar explicación">✕</button>
+          <h4>¿Qué onda con esto?</h4>
+          <div id="postText"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= BUDGET ================= -->
+<div id="budget" class="screen">
+  <div class="wrap">
+    <div class="b-head">
+      <h2>Sos presi por un día</h2>
+      <p>Te cayeron Q1,000 millones extra al presupuesto. Tocá <b>+</b> para meterle Q100 millones a un tema y <b>−</b> para quitarle. Lo que no repartás, se queda en una gaveta (y ya sabemos cómo termina eso).</p>
+    </div>
+    <div class="purse" aria-live="polite">
+      <span class="coins" id="purseCoins"></span>
+      <b id="purseText">Te quedan Q1,000 millones</b>
+    </div>
+    <div class="bgrid" id="bgrid"></div>
+    <div class="b-cta"><button class="btn" id="toResults" disabled>Repartí todo el pisto primero</button></div>
+  </div>
+</div>
+
+<!-- ================= RESULTS ================= -->
+<div id="results" class="screen">
+  <div class="wrap">
+    <div class="acta-head">
+      <h2>Acta levantada</h2>
+      <div class="seal" id="seal">URNA+<br>—</div>
+    </div>
+    <div class="rgrid">
+      <div class="win compass">
+        <div class="win-bar"><i></i><i></i><i></i><span>tu_brujula.svg</span></div>
+        <div class="win-body">
+          <svg id="compass" viewBox="0 0 320 320" role="img" aria-label="Brújula política"></svg>
+          <h3 class="qname" id="qname"></h3>
+          <p id="qdesc"></p>
+          <div class="bars" id="bars"></div>
+          <p style="font-family:var(--stamp);font-size:.9rem;color:var(--muted);margin:.8rem 0 0">Esto es una brújula, no una jaula. Podés pensar distinto en cada tema y está bien.</p>
+        </div>
+      </div>
+      <div style="display:grid;gap:1.8rem">
+        <div class="win">
+          <div class="win-bar"><i></i><i></i><i></i><span>top_3_temas.doc</span></div>
+          <div class="win-body">
+            <h3 style="font-size:2.4rem;margin-bottom:1rem">Lo que no negociás</h3>
+            <div class="podium" id="podium"></div>
+          </div>
+        </div>
+        <div class="win locked">
+          <div class="win-bar"><i></i><i></i><i></i><span>match_candidatos.exe</span></div>
+          <div class="win-body">
+            <div class="padlock"><svg><use href="#i-lock"/></svg></div>
+            <div>
+              <h3 style="font-size:2rem">Match con candidatos: bloqueado</h3>
+              <p style="margin:.3rem 0 .6rem">Se desbloquea cuando las candidaturas estén inscritas y publiquen sus planes (a más tardar el 28 de marzo de 2027). Tu acta queda guardada en este dispositivo.</p>
+              <button class="linkish" data-goto-radar>Mientras, ver el Radar 2027</button>
+            </div>
+          </div>
+        </div>
+        <div class="win">
+          <div class="win-bar"><i></i><i></i><i></i><span>sumate_al_mapa.exe</span></div>
+          <div class="win-body optin" id="optin">
+            <h3 style="font-size:2rem">Sumá tu acta al mapa</h3>
+            <p style="margin:0">Anónimo. Solo van tus 3 temas, tu punto en la brújula y tu departamento si lo elegís.</p>
+            <div class="row">
+              <label class="sr" for="depPick">Tu departamento (opcional)</label>
+              <select id="depPick"><option value="">Departamento (opcional)</option></select>
+              <button class="btn" id="joinMap">Sumarme</button>
+            </div>
+            <p id="optinMsg" style="margin:0;font-family:var(--stamp);font-size:.9rem;color:var(--muted)"></p>
+          </div>
+        </div>
+        <div class="win">
+          <div class="win-bar"><i></i><i></i><i></i><span>aprendiste.txt</span></div>
+          <div class="win-body learned" id="learned"></div>
+        </div>
+      </div>
+    </div>
+    <div class="win padron" style="margin-top:1.8rem;padding:0">
+      <div class="win-bar"><i></i><i></i><i></i><span>ultimo_paso.pdf</span></div>
+      <div class="win-body">
+        <div class="id" aria-hidden="true"></div>
+        <div><h3>Ya sabés qué pensás. ¿Y estás en el padrón?</h3><p>De nada sirve el acta si el 27 de junio no aparecés. Revisalo con tu DPI.</p></div>
+        <div class="links"><a class="btn yellow" href="https://tse.org.gt/reg-ciudadanos/sistema-de-estadisticas/consulta-de-afiliacion" target="_blank" rel="noopener">Revisar en el TSE ↗</a></div>
+      </div>
+    </div>
+    <div class="r-actions">
+      <button class="btn" id="share">Compartir mi acta</button>
+      <a class="btn" id="wa" href="#" target="_blank" rel="noopener" style="background:#25D366">Mandar por WhatsApp</a>
+      <button class="btn yellow" data-start>Repetir el test</button>
+      <button class="btn ghost" data-go="home">Volver al inicio</button>
+    </div>
+  </div>
+</div>
+</main>
+
+<div class="toast" id="toast" role="status"></div>
+<div class="share-modal" id="shareModal" hidden role="dialog" aria-modal="true" aria-labelledby="shareTitle">
+  <div class="win">
+    <div class="win-bar"><i></i><i></i><i></i><span>compartir_acta.exe</span></div>
+    <button class="share-close" id="shareClose" aria-label="Cerrar">✕</button>
+    <div class="win-body">
+      <h3 id="shareTitle" style="font-size:2.2rem;margin-bottom:.8rem">Compartí tu acta</h3>
+      <p class="share-preview" id="sharePreview"></p>
+      <div class="share-opts">
+        <a class="btn" id="shWa" target="_blank" rel="noopener">WhatsApp</a>
+        <a class="btn yellow" id="shX" target="_blank" rel="noopener">X / Twitter</a>
+        <a class="btn ghost" id="shFb" target="_blank" rel="noopener">Facebook</a>
+        <button class="btn ghost" id="shCopy">Copiar texto</button>
+        <button class="btn ghost" id="shMore" hidden style="grid-column:1/-1">Más opciones</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ======================= DATA ======================= */
+const TOPICS = {
+  seguridad:{name:"Seguridad",sub:"Salir sin miedo a que te bajen el cel",ask:["¿Qué va a hacer en sus primeros 100 días contra las extorsiones?","¿De dónde va a salir el pisto para más agentes y mejores cárceles?"]},
+  salud:{name:"Salud",sub:"Que haya medicina en el centro de salud",ask:["¿Cómo va a garantizar medicinas en hospitales y centros de salud?","¿Qué propone para la gente que no tiene IGSS?"]},
+  educacion:{name:"Educación",sub:"Escuelas con techo, maestros y futuro",ask:["¿Cuántas escuelas va a reparar y en qué departamentos?","¿Qué va a hacer para que los patojos no dejen de estudiar para irse a trabajar?"]},
+  chamba:{name:"Chamba y pisto",sub:"Empleo, salarios y que alcance",ask:["¿Cuántos empleos formales promete y cómo los vamos a poder medir?","¿Va a subir, bajar o dejar igual los impuestos? ¿A quién exactamente?"]},
+  transparencia:{name:"Cero chanchullos",sub:"Instituciones que rindan cuentas",ask:["¿Quién financia su campaña? ¿Lo puede publicar hoy?","¿Va a publicar todas las compras del gobierno en datos abiertos?"]},
+  migracion:{name:"Migración",sub:"Que irse no sea la única opción",ask:["¿Qué va a hacer para que la gente no tenga que irse de su comunidad?","¿Cómo va a apoyar a quienes regresan deportados?"]},
+  ambiente:{name:"Ambiente y agua",sub:"Ríos limpios y agua en el chorro",ask:["¿Va a impulsar una ley de aguas? ¿Con qué reglas?","¿Qué va a hacer con la basura y la contaminación de ríos y lagos?"]},
+  derechos:{name:"Derechos y comunidades",sub:"Que la ley sea pareja para todos",ask:["¿Cómo van a participar los pueblos indígenas en las decisiones que les afectan?","¿Cómo va a equilibrar el derecho a protestar con el derecho a circular?"]}
+};
+// axis: x = economía (− Estado / + Mercado) · y = sociedad (+ Orden y tradición / − Libertades y cambio)
+const QS = [
+ {t:"seguridad",a:"y",d:1,q:"Para frenar las extorsiones, el Ejército debería patrullar las calles junto a la PNC.",
+  info:"<p>La Constitución le da la seguridad ciudadana a la PNC, que es civil. Varios gobiernos han sacado al Ejército a apoyar en las calles, sobre todo en estados de excepción.</p><p><b>Quienes dicen que sí:</b> hay más presencia y respuesta rápida. <b>Quienes dicen que no:</b> el Ejército no está entrenado para tratar con civiles y se arriesga la militarización que los Acuerdos de Paz buscaban dejar atrás.</p>"},
+ {t:"seguridad",a:"y",d:-1,q:"Invertir en becas, canchas y chamba para jóvenes previene más violencia que meter más gente a la cárcel.",
+  info:"<p>Es el debate de siempre: <b>prevención</b> (atacar las causas) contra <b>castigo</b> (penas más duras y más cárceles). Las cárceles de Guatemala ya están sobrepobladas.</p><p>Quienes apoyan la prevención dicen que es más barata a largo plazo. Quienes prefieren mano dura dicen que la gente necesita resultados ya.</p>"},
+ {t:"salud",a:"x",d:-1,q:"Los hospitales públicos y el IGSS deberían recibir mucho más pisto, aunque toque subir impuestos.",
+  info:"<p>El <b>IGSS</b> es el seguro social: cubre a quienes tienen trabajo formal y cotizan. La mayoría de guatemaltecos trabaja en la informalidad y depende de hospitales y centros de salud del Ministerio de Salud.</p><p>Más fondos podrían significar más medicinas y personal. El costo: más impuestos o recortes en otros lados.</p>"},
+ {t:"salud",a:"x",d:1,q:"Está bien que clínicas privadas atiendan a pacientes del sistema público, pagadas por el Estado.",
+  info:"<p>Se llama <b>tercerizar</b> o subcontratar servicios. El Estado paga y un privado atiende.</p><p><b>A favor:</b> se acortan las colas y se aprovecha lo que ya existe. <b>En contra:</b> puede salir más caro, es difícil de fiscalizar y no fortalece al sistema público.</p>"},
+ {t:"educacion",a:"y",d:-1,q:"En las escuelas debería enseñarse educación sexual integral.",
+  info:"<p>La <b>educación sexual integral</b> incluye biología, consentimiento, prevención de embarazos y de abusos.</p><p>Quienes la apoyan dicen que ayuda a prevenir embarazos adolescentes y abuso infantil. Quienes se oponen dicen que ese tema le toca a las familias y no a la escuela.</p>"},
+ {t:"educacion",a:"x",d:-1,q:"La universidad pública debería crecer para que muchos más jóvenes estudien gratis.",
+  info:"<p>La USAC es la única universidad pública del país y la Constitución le asigna al menos el 5% del presupuesto ordinario del Estado.</p><p>Más cupos y sedes significa más acceso. El debate: cuánto más pisto, de dónde sale y cómo se fiscaliza su uso.</p>"},
+ {t:"chamba",a:"x",d:1,q:"Bajarle impuestos a las empresas es la mejor forma de crear empleo.",
+  info:"<p>Guatemala ya tiene una de las cargas tributarias más bajas de Latinoamérica: el Estado recauda poco en relación con su economía.</p><p><b>A favor:</b> más inversión y más empresas formales. <b>En contra:</b> menos dinero para escuelas, hospitales y seguridad.</p>"},
+ {t:"chamba",a:"x",d:-1,q:"El salario mínimo debería subir cada año, aunque a algunos negocios les cueste.",
+  info:"<p>El Ejecutivo fija el salario mínimo cada año, con montos distintos por región y tipo de trabajo.</p><p>Subirlo mejora el poder de compra de quien lo gana. El riesgo: que pequeños negocios no puedan pagarlo y contraten en la informalidad.</p>"},
+ {t:"chamba",a:"x",d:1,q:"Las carreteras deberían construirlas empresas privadas que luego cobren peaje.",
+  info:"<p>Se llaman <b>alianzas público-privadas</b> (APP). En Guatemala hay ley para eso desde 2010.</p><p><b>A favor:</b> se construye más rápido sin esperar al presupuesto. <b>En contra:</b> pagás peaje por años y los contratos pueden quedar mal negociados.</p>"},
+ {t:"transparencia",a:null,d:0,q:"Los diputados y funcionarios deberían perder el derecho de antejuicio.",
+  info:"<p>El <b>antejuicio</b> es un filtro: antes de procesar a ciertos funcionarios, un juez y a veces el Congreso deciden si hay base para hacerlo.</p><p>Se creó para evitar acusaciones políticas sin fundamento. Sus críticos dicen que se usa como escudo para no rendir cuentas.</p>"},
+ {t:"transparencia",a:null,d:0,q:"El presidente debería poder destituir al fiscal general sin necesidad de una causa justificada.",
+  info:"<p>El fiscal general dirige el Ministerio Público y dura 4 años. El presidente lo escoge de una lista de seis que arma una comisión de postulación, y hoy solo puede destituirlo con causa justificada.</p><p>Unos dicen que así el presidente responde por la lucha contra la corrupción. Otros, que el MP debe ser independiente del gobierno de turno.</p>"},
+ {t:"transparencia",a:"y",d:1,q:"Un presidente que lo hace bien debería poder reelegirse.",
+  info:"<p>En Guatemala la reelección presidencial está prohibida, y ni siquiera se puede reformar ese artículo de la Constitución. Es una regla pensada para evitar que alguien se perpetúe en el poder.</p><p>Quienes apoyan la reelección dicen que 4 años no alcanzan para terminar proyectos.</p>"},
+ {t:"migracion",a:"y",d:1,q:"Guatemala debería cooperar con EE.UU. para frenar la migración, aunque eso implique más controles en la frontera.",
+  info:"<p>Las remesas que mandan los guatemaltecos en EE.UU. son una parte enorme de la economía del país.</p><p><b>A favor de cooperar:</b> buena relación con EE.UU. y menos riesgo en la ruta. <b>En contra:</b> se trata la migración como problema policial y no se atacan las causas.</p>"},
+ {t:"migracion",a:"x",d:1,q:"Lo que más frena la migración es atraer inversión privada que dé chamba, más que programas del gobierno.",
+  info:"<p>La gente se va por falta de empleo, violencia, desastres y reunificación familiar.</p><p>Unos apuestan por atraer empresas que generen empleo. Otros, por programas públicos en las comunidades: escuelas, salud, apoyo al campo.</p>"},
+ {t:"ambiente",a:"x",d:1,q:"Los proyectos mineros e hidroeléctricos deberían avanzar aunque una comunidad cercana se oponga, por el empleo que generan.",
+  info:"<p>Guatemala ratificó el <b>Convenio 169 de la OIT</b>, que obliga a consultar a los pueblos indígenas antes de proyectos que les afectan. Todavía no hay una ley que regule bien cómo se hacen esas consultas.</p><p>De un lado: inversión, empleo y energía. Del otro: agua, territorio y el derecho a decidir.</p>"},
+ {t:"ambiente",a:"x",d:-1,q:"Guatemala necesita una ley de aguas, aunque limite cuánta agua pueden usar fincas y empresas.",
+  info:"<p>La Constitución manda que exista una <b>ley de aguas</b>… desde 1985. Nunca se ha aprobado.</p><p><b>A favor:</b> reglas claras para que el agua alcance para todos. <b>En contra:</b> miedo a que se afecte la producción agrícola o a que el Estado controle demasiado.</p>"},
+ {t:"derechos",a:"y",d:-1,q:"El matrimonio entre personas del mismo sexo debería ser legal en Guatemala.",
+  info:"<p>Hoy el Código Civil define el matrimonio como la unión entre un hombre y una mujer.</p><p>Quienes apoyan el cambio hablan de igualdad ante la ley. Quienes se oponen lo hacen por convicciones religiosas, culturales o sobre el concepto de familia.</p>"},
+ {t:"derechos",a:"y",d:1,q:"La religión debería tener un papel importante en las decisiones del gobierno.",
+  info:"<p>La Constitución garantiza la libertad de religión y no establece una religión oficial.</p><p>Unos creen que la fe aporta valores al gobierno. Otros, que las decisiones públicas deben ser para todos, crean lo que crean.</p>"},
+ {t:"derechos",a:"y",d:-1,q:"Las autoridades indígenas ancestrales deberían tener reconocimiento legal para resolver conflictos en sus comunidades.",
+  info:"<p>Guatemala tiene 22 pueblos mayas, además del garífuna y el xinka. Hay autoridades como los 48 Cantones de Totonicapán o las alcaldías indígenas.</p><p>La Constitución reconoce sus formas de organización. El debate es si su justicia debe tener el mismo peso legal que la de los juzgados.</p>"},
+ {t:"derechos",a:"y",d:1,q:"Las protestas que bloquean carreteras deberían prohibirse.",
+  info:"<p>La Constitución protege la manifestación pacífica. Los bloqueos han sido clave en protestas grandes, como el paro nacional de 2023.</p><p>También afectan a quien necesita llegar al trabajo, al hospital o vender su producto. ¿Dónde está el equilibrio?</p>"}
+];
+const SCALE = [
+ {v:-2,e:"f-m2",l:"¡Ni de chiste!",s:"¡NI DE CHISTE!"},
+ {v:-1,e:"f-m1",l:"Medio que no",s:"MEDIO QUE NO"},
+ {v:0, e:"f-0",l:"Ni fu ni fa",s:"NI FU NI FA"},
+ {v:1, e:"f-p1",l:"Va pues",s:"VA PUES"},
+ {v:2, e:"f-p2",l:"¡Simón!",s:"¡SIMÓN!"}
+];
+const CANDS = [
+ {n:"Fausto Arimany",ln:"Arimany",p:"Partido por confirmar",d:"Empresario, economista de la UFM. Sin cargos de elección popular previos."},
+ {n:"Roberto Arzú",ln:"Arzú",p:"Cabal",d:"Precandidato. En 2023 le revocaron la candidatura por una multa pendiente de su partido."},
+ {n:"Napoleón Barrientos",ln:"Barrientos",p:"Partido por confirmar",d:"Militar retirado y exministro de Gobernación. Renunció en 2023 durante el paro nacional."},
+ {n:"Neto Bran",ln:"Bran",p:"CREO",d:"Alcalde de Mixco desde 2015, reelecto en 2023."},
+ {n:"Oscar Rodolfo Castañeda",ln:"Castañeda",p:"Poder",d:"Aparece en el listado de aspirantes del partido."},
+ {n:"Armando Castillo",ln:"Castillo",p:"VIVA",d:"Diputado desde 2020. Cuarto lugar en la presidencial de 2023."},
+ {n:"Oscar Cruz",ln:"Cruz",p:"Jaguar",d:"Expresidente de la Corte Suprema de Justicia y del Organismo Judicial."},
+ {n:"Isaac Farchi",ln:"Farchi",p:"Cambio",d:"Exdiputado. Candidato presidencial en 2019 y 2023."},
+ {n:"Annabella Giracca",ln:"Giracca",p:"Raíces",d:"Escritora y educadora. Ministra de Educación desde 2024."},
+ {n:"Sandra Jovel",ln:"Jovel",p:"Fuerza",d:"Excanciller y diputada electa en 2023 por el Distrito Central."},
+ {n:"Sergio Madrazo",ln:"Madrazo",p:"Todos",d:"Abogado, empresario y autor. Sin cargos de elección popular previos."},
+ {n:"Edmond Mulet",ln:"Mulet",p:"GUATE X (plataforma)",d:"Diplomático. Tercer lugar en 2019 y quinto en 2023."},
+ {n:"Hugo Peña",ln:"Peña",p:"Comunidad Elefante",d:"Fundador del partido. Candidato presidencial en 2023."},
+ {n:"Carlos Pineda",ln:"Pineda",p:"SERVIR",d:"Empresario. Su candidatura de 2023 fue excluida por la Corte de Constitucionalidad."},
+ {n:"Geovanni Reyes",ln:"Reyes",p:"Azul",d:"Aparece en el listado de aspirantes del partido."},
+ {n:"Zury Ríos",ln:"Ríos",p:"Partido Unionista",d:"Exdiputada por cuatro periodos. Candidata en 2023 por Valor-Unionista."},
+ {n:"Abraham Rivera",ln:"Rivera A",p:"Victoria",d:"Aparece en el listado de aspirantes del partido."},
+ {n:"Shirley Rivera",ln:"Rivera S",p:"Nuevos Tiempos",d:"Expresidenta del Congreso. Fundó su partido en 2025."},
+ {n:"Sandra Torres",ln:"Torres",p:"UNE",d:"Cofundadora de la UNE. Llegó a segunda vuelta en 2015, 2019 y 2023."}
+];
+const GLOSS = [
+ ["Padrón electoral","La lista oficial de quienes pueden votar. Si no estás ahí, no votás aunque tengás DPI. Se cierra cuando el TSE convoca a elecciones."],
+ ["Empadronarse","Inscribirte en el TSE para quedar en el padrón y que te asignen centro de votación. Llevás tu DPI y listo."],
+ ["Voto nulo","Cuando marcás más de una opción o rayás la boleta. Cuenta como voto emitido, pero no le suma a nadie."],
+ ["Voto en blanco","Cuando dejás la boleta sin marcar. Tampoco le suma a ninguna candidatura."],
+ ["Segunda vuelta","Si nadie saca más de la mitad de los votos válidos para presidencia, los dos más votados se vuelven a enfrentar."],
+ ["Plan de gobierno","El documento con lo que una candidatura promete hacer. Pedilo, leelo y preguntá cómo lo va a pagar."],
+ ["Antejuicio","Un filtro previo para procesar a ciertos funcionarios. Sirve contra acusaciones falsas, pero se puede usar como escudo."],
+ ["Diputados distritales y por lista nacional","En la boleta votás por diputados de tu departamento y, aparte, por una lista nacional. Son dos votos distintos."],
+ ["Comité cívico","Grupo de vecinos que puede postular candidaturas a alcaldía sin ser partido político."],
+ ["Ley seca","Prohibición de vender alcohol durante las elecciones. En 2027 va del 26 al 28 de junio."]
+];
+const TICK = ["Votá con criterio","No te dejés babosear","Leé el plan de gobierno","Empadronate","Preguntá de dónde sale el pisto","Tu voto no se vende","Cuestioná todo, también a nosotros"];
+
+/* ======================= HELPERS ======================= */
+const $ = s => document.querySelector(s);
+const icon = k => `<svg aria-hidden="true"><use href="#i-${k}"/></svg>`;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const store = {
+  get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("on");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("on"),1900)}
+function swap(id){document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("on",s.id===id));document.body.classList.toggle("at-home",id==="home");window.scrollTo({top:0,behavior:"instant"})}
+/* ---------- Loader ---------- */
+const LD={el:null,timer:null,busy:false};
+const LOAD_MSGS={
+  game:["Sacando tu boleta…","Sacándole punta al crayón…","Sellando expedientes…"],
+  budget:["Contando el pisto del país…","Abriendo la caja fuerte…","Revisando que no falte nada…"],
+  results:["Levantando tu acta…","Pasándola en limpio…","Poniéndole sello oficial…"],
+  home:["Regresando al inicio…","Va pues, ya casi…"],
+  "#que-es":["Abriendo el expediente…"],"#mapa":["Juntando las burbujas…"],"#radar":["Encendiendo el radar…"],
+  "#por-que":["Sacando los papeles…"],"#calendario":["Hojeando el calendario…"],"#diccionario":["Abriendo el diccionario…"],"#como":["Leyendo las reglas…"]
+};
+const FILES={game:"boleta_2027.exe",budget:"presupuesto.xls",results:"acta_levantada.pdf",home:"inicio.exe"};
+function runBar(ms,msgs){
+  const fill=$("#ldFill"),pct=$("#ldPct"),msg=$("#ldMsg");
+  fill.style.transition="none";fill.style.width="0";void fill.offsetWidth;
+  fill.style.transition=`width ${ms}ms linear`;fill.style.width="100%";
+  const t0=performance.now();let mi=0;msg.textContent=msgs[0];
+  cancelAnimationFrame(LD.timer);
+  const tick=now=>{const k=Math.min(1,(now-t0)/ms);pct.textContent=Math.round(k*100)+"%";
+    const idx=Math.min(msgs.length-1,Math.floor(k*msgs.length));if(idx!==mi){mi=idx;msg.textContent=msgs[idx]}
+    if(k<1)LD.timer=requestAnimationFrame(tick)};
+  LD.timer=requestAnimationFrame(tick);
+}
+function loadThen(key,fn){
+  if(LD.busy){fn&&fn();return}
+  LD.busy=true;
+  const el=$("#loader"),ms=reduce?250:850;
+  el.className="";$("#ldFile").textContent=FILES[key]||"cargando.exe";
+  runBar(ms,LOAD_MSGS[key]||["Cargando…"]);
+  setTimeout(()=>{fn&&fn();setTimeout(()=>{el.className="hide";LD.busy=false},reduce?0:120)},ms);
+}
+function show(id,after){
+  const cur=document.querySelector(".screen.on")?.id;
+  if(cur===id){after&&after();return}
+  loadThen(id,()=>{swap(id);after&&after()});
+}
+/* ---------- Splash ---------- */
+(function splash(){
+  const el=$("#loader"),ms=reduce?400:2000;
+  runBar(ms,["Desempolvando la urna…","Contando boletas…","Despertando al TSE…","Listo, ya casi…"]);
+  const minTime=new Promise(r=>setTimeout(r,ms));
+  const fonts=document.fonts?Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,3500))]):Promise.resolve();
+  Promise.all([minTime,fonts]).then(()=>{
+    el.classList.add("ready");$("#ldEnter").focus({preventScroll:true});
+    const enter=e=>{if(e.type==="keydown"&&!["Enter"," ","Escape"].includes(e.key))return;
+      el.removeEventListener("click",enter);document.removeEventListener("keydown",enter);
+      el.classList.add("exit");document.body.classList.remove("locked");
+      setTimeout(()=>{el.className="hide"},reduce?150:650)};
+    el.addEventListener("click",enter);document.addEventListener("keydown",enter);
+  });
+})();
+
+/* ======================= HOME ======================= */
+(function home(){
+  const line = TICK.map(t=>`<span>${t}</span><span class="pl">✚</span>`).join("");
+  $("#tickerText").innerHTML = line+line;
+  const days = Math.max(0,Math.ceil((new Date("2027-06-27T07:00:00-06:00") - new Date())/864e5));
+  $("#days").textContent = days;
+  const renderCands = (f="") => {
+    const s=f.trim().toLowerCase();
+    const list=[...CANDS].sort((a,b)=>a.ln.localeCompare(b.ln,"es")).filter(c=>!s||(c.n+" "+c.p).toLowerCase().includes(s));
+    $("#cands").innerHTML = list.length ? list.map(c=>`
+      <article class="win cand"><div class="win-bar"><i></i><i></i><i></i><span>${c.p}</span></div>
+      <div class="win-body"><h3>${c.n}</h3><p>${c.d}</p><span class="lock">${icon("lock")} Plan de gobierno: pendiente</span></div></article>`).join("")
+      : `<p>No encontramos a nadie con “${f}”. Probá con otro nombre o partido.</p>`;
+  };
+  renderCands();
+  $("#q").addEventListener("input",e=>renderCands(e.target.value));
+  $("#gloss").innerHTML = GLOSS.map(g=>`<details><summary>${g[0]}</summary><p>${g[1]}</p></details>`).join("");
+  if(store.get("urna-acta-v1")) $("#lastActa").hidden=false;
+  $("#lastActa").addEventListener("click",()=>{const r=store.get("urna-acta-v1");if(r){renderResults(r);show("results")}});
+})();
+
+document.addEventListener("click",e=>{
+  const go=e.target.closest("[data-go]");
+  if(go){
+    const href=go.getAttribute("href");
+    const target=href&&href.length>1?document.querySelector(href):null;
+    e.preventDefault();
+    if(!$("#home").classList.contains("on")){show("home",()=>target?.scrollIntoView({behavior:"instant"}))}
+    else if(target){loadThen(href,()=>target.scrollIntoView({behavior:"instant"}))}
+    else window.scrollTo({top:0,behavior:"smooth"});
+    return;
+  }
+  if(e.target.closest("[data-start]")) startGame();
+  if(e.target.closest("[data-goto-radar]")){show("home",()=>$("#radar").scrollIntoView({behavior:"instant"}))}
+});
+
+/* ======================= GAME ======================= */
+let S;
+function startGame(){
+  S={i:0,ans:Array(QS.length).fill(null),fire:new Set(),peek:new Set(),budget:Object.fromEntries(Object.keys(TOPICS).map(k=>[k,0])),busy:false};
+  $("#scale").innerHTML = SCALE.map((s,i)=>`<button data-v="${s.v}" aria-keyshortcuts="${i+1}"><svg class="e" aria-hidden="true"><use href="#${s.e}"/></svg>${s.l}</button>`).join("");
+  $("#ballot").innerHTML = QS.map(()=>"<b></b>").join("");
+  show("game");renderQ();
+}
+function renderQ(){
+  const q=QS[S.i],t=TOPICS[q.t];
+  $("#counter").textContent=`${S.i+1} de ${QS.length}`;
+  $("#qbar").textContent=`expediente_${String(S.i+1).padStart(2,"0")}.doc`;
+  $("#qchip").innerHTML=`${icon(q.t)}${t.name}`;
+  $("#qtext").textContent=q.q;
+  $("#postText").innerHTML=q.info;
+  $("#postit").classList.remove("on");
+  $("#back").disabled=S.i===0;
+  const f=S.fire.has(S.i);$("#fire").setAttribute("aria-pressed",f);
+  document.querySelectorAll("#scale button").forEach(b=>b.classList.toggle("sel",+b.dataset.v===S.ans[S.i]));
+  document.querySelectorAll("#ballot b").forEach((b,i)=>{b.className=(S.ans[i]!==null?"done":"")+(i===S.i?" cur":"")});
+  const sm=$("#stampmark");sm.className="stampmark";
+}
+function answer(v){
+  if(S.busy)return;S.busy=true;
+  S.ans[S.i]=v;
+  const sm=$("#stampmark");sm.textContent=SCALE.find(s=>s.v===v).s;
+  void sm.offsetWidth;sm.classList.add("hit");
+  document.querySelectorAll("#scale button").forEach(b=>b.classList.toggle("sel",+b.dataset.v===v));
+  const card=$("#qcard");
+  const dir = v>0?1:v<0?-1:0;
+  setTimeout(()=>{
+    if(!reduce){card.style.transition="transform .32s ease-in, opacity .32s";card.style.transform=`translateX(${dir*120}%) rotate(${dir*14}deg) translateY(${dir?0:40}px)`;card.style.opacity="0"}
+    setTimeout(()=>{
+      const n=S.ans.filter(a=>a!==null).length;
+      if(S.i===QS.length-1){toast("¡Boleta llena! Ahora, el pisto.");resetCard();S.busy=false;openBudget();return}
+      S.i++;
+      if(n===5)toast("¡Vas cabal! 5 de 20");
+      if(n===10)toast("Mitad de la boleta. ¡Puchis, qué rápido!");
+      if(n===15)toast("Ya casi, no te me rajés");
+      card.style.transition="none";card.style.transform=reduce?"none":`translateX(${-dir*40}px) scale(.96)`;
+      renderQ();
+      requestAnimationFrame(()=>{card.style.transition="transform .25s ease-out, opacity .25s";card.style.transform="none";card.style.opacity="1";S.busy=false});
+    },reduce?0:300);
+  },reduce?150:430);
+}
+function resetCard(){const c=$("#qcard");c.style.transition="none";c.style.transform="none";c.style.opacity="1"}
+$("#scale").addEventListener("click",e=>{const b=e.target.closest("button");if(b)answer(+b.dataset.v)});
+$("#back").addEventListener("click",()=>{if(S.i>0&&!S.busy){S.i--;renderQ()}});
+$("#peek").addEventListener("click",()=>{S.peek.add(S.i);$("#postit").classList.add("on");$("#postClose").focus()});
+$("#postClose").addEventListener("click",()=>{$("#postit").classList.remove("on");$("#peek").focus()});
+$("#fire").addEventListener("click",()=>{
+  const on=!S.fire.has(S.i);on?S.fire.add(S.i):S.fire.delete(S.i);
+  $("#fire").setAttribute("aria-pressed",on);if(on)toast("Anotado: esto te importa");
+});
+document.addEventListener("keydown",e=>{
+  if(!$("#game").classList.contains("on")||e.target.matches("input"))return;
+  if(e.key==="Escape")$("#postit").classList.remove("on");
+  if(/^[1-5]$/.test(e.key))answer(SCALE[+e.key-1].v);
+  if(e.key==="ArrowRight")answer(2);
+  if(e.key==="ArrowLeft")answer(-2);
+});
+// swipe
+(function swipe(){
+  const card=$("#qcard");let x0=null,y0=0,dx=0,id=null;
+  card.addEventListener("pointerdown",e=>{if(e.target.closest("button,.postit")||S.busy)return;x0=e.clientX;y0=e.clientY;dx=0;id=e.pointerId;card.setPointerCapture(id);card.style.transition="none"});
+  card.addEventListener("pointermove",e=>{if(x0===null)return;dx=e.clientX-x0;const dy=e.clientY-y0;if(Math.abs(dy)>Math.abs(dx)&&Math.abs(dx)<10)return;
+    card.style.transform=`translateX(${dx}px) rotate(${dx/18}deg)`;
+    $("#dl-yes").style.opacity=Math.max(0,Math.min(1,dx/90));$("#dl-no").style.opacity=Math.max(0,Math.min(1,-dx/90))});
+  const end=()=>{if(x0===null)return;x0=null;$("#dl-yes").style.opacity=0;$("#dl-no").style.opacity=0;
+    if(Math.abs(dx)>90){answer(dx>0?2:-2)}else{card.style.transition="transform .2s";card.style.transform="none"}};
+  card.addEventListener("pointerup",end);card.addEventListener("pointercancel",end);
+})();
+
+/* ======================= BUDGET ======================= */
+const TOTAL=10;
+function openBudget(){
+  $("#bgrid").innerHTML=Object.entries(TOPICS).map(([k,t])=>`
+   <div class="win btile" data-k="${k}"><div class="win-bar"><i></i><i></i><i></i><span>${k}.xls</span></div>
+   <div class="win-body"><div class="ico">${icon(k)}</div><h3>${t.name}</h3><small>${t.sub}</small>
+   <div class="bctrl"><button class="minus" aria-label="Quitar Q100 millones a ${t.name}">−</button><output aria-live="polite">Q0</output><button class="plus" aria-label="Agregar Q100 millones a ${t.name}">+</button></div>
+   <div class="stack" aria-hidden="true"></div></div></div>`).join("");
+  show("budget");renderBudget();
+}
+function renderBudget(){
+  const used=Object.values(S.budget).reduce((a,b)=>a+b,0),rem=TOTAL-used;
+  $("#purseCoins").innerHTML=Array.from({length:TOTAL},(_,i)=>`<span class="coin ${i<used?"spent":""}"></span>`).join("");
+  $("#purseText").textContent= rem? `Te quedan Q${(rem*100).toLocaleString("es-GT")} millones` : "¡Puchis, ya no hay pisto!";
+  document.querySelectorAll(".btile").forEach(el=>{
+    const n=S.budget[el.dataset.k];
+    el.querySelector(".stack").innerHTML=Array.from({length:n},()=>`<span class="coin"></span>`).join("");
+    el.querySelector("output").textContent= n? `Q${n*100}M` : "Q0";
+    el.querySelector(".minus").disabled=n===0;el.querySelector(".plus").disabled=rem===0;
+  });
+  const b=$("#toResults");b.disabled=rem>0;
+  b.textContent= rem? `Te faltan Q${(rem*100).toLocaleString("es-GT")} millones por repartir` : "Levantar mi acta";
+}
+$("#bgrid").addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b)return;const k=b.closest(".btile").dataset.k;
+  const used=Object.values(S.budget).reduce((a,c)=>a+c,0);
+  if(b.classList.contains("plus")&&used<TOTAL)S.budget[k]++;
+  if(b.classList.contains("minus")&&S.budget[k]>0)S.budget[k]--;
+  renderBudget();
+  if(Object.values(S.budget).reduce((a,c)=>a+c,0)===TOTAL)toast("Presupuesto aprobado. Ni el Congreso fue tan rápido.");
+});
+$("#toResults").addEventListener("click",()=>{const r=compute();store.set("urna-acta-v1",r);$("#lastActa").hidden=false;renderResults(r);show("results")});
+
+/* ======================= MAPA (db compartida) ======================= */
+const DEPS=["Alta Verapaz","Baja Verapaz","Chimaltenango","Chiquimula","El Progreso","Escuintla","Guatemala","Huehuetenango","Izabal","Jalapa","Jutiapa","Petén","Quetzaltenango","Quiché","Retalhuleu","Sacatepéquez","San Marcos","Santa Rosa","Sololá","Suchitepéquez","Totonicapán","Zacapa","Fuera de Guatemala"];
+const M={db:null,uid:null,rows:[],ready:false,off:false};
+$("#depFilter").innerHTML+=DEPS.map(d=>`<option>${d}</option>`).join("");
+$("#depPick").innerHTML+=DEPS.map(d=>`<option>${d}</option>`).join("");
+$("#depFilter").addEventListener("change",renderMap);
+function mapOff(){M.off=true;renderMap();renderOptin()}
+(async()=>{
+  try{
+    if(!window.claude||!window.claude.use){mapOff();return}
+    const [db,user]=await Promise.all([claude.use("db"),claude.use("user")]);
+    if(!db){mapOff();return}
+    M.db=db;M.uid=user?await user.id():null;
+    db.collection("mapa").limit(1000).onSnapshot(snap=>{
+      M.rows=snap.docs.map(d=>({id:d.id,...(d.data()||{})})).filter(r=>Array.isArray(r.top));
+      M.ready=true;renderMap();renderOptin();
+    },()=>mapOff());
+  }catch(e){mapOff()}
+})();
+function renderMap(){
+  const box=$("#bubbles"),cnt=$("#mapCount");
+  if(M.off){cnt.textContent="Se enciende pronto";box.innerHTML=`<p class="empty">El mapa en vivo se enciende pronto. Mientras, hacé el test: tu acta queda guardada en tu dispositivo y vas a poder sumarla cuando abra.</p><div style="width:100%;text-align:center"><button class="btn" data-start>Hacer el test</button></div>`;$("#depFilter").hidden=true;drawCrowd([]);return}
+  if(!M.ready){return}
+  const dep=$("#depFilter").value;
+  const rows=M.rows.filter(r=>!dep||r.dep===dep);
+  cnt.textContent= rows.length===1?"1 persona en el mapa":`${rows.length} personas en el mapa`;
+  if(!rows.length){box.innerHTML=`<p class="empty">${dep?`Nadie de ${dep} se ha sumado todavía. ¡Estrenalo vos!`:"El mapa está vacío. Hacé el test y sé la primera burbuja."}</p><div style="width:100%;text-align:center"><button class="btn" data-start>Hacer el test</button></div>`;drawCrowd([]);return}
+  const pts={},hits={};Object.keys(TOPICS).forEach(k=>{pts[k]=0;hits[k]=0});
+  rows.forEach(r=>r.top.slice(0,3).forEach((k,i)=>{if(k in pts){pts[k]+=3-i;hits[k]++}}));
+  const max=Math.max(...Object.values(pts),1);
+  const order=Object.keys(pts).sort((a,b)=>pts[b]-pts[a]);
+  box.innerHTML=order.map((k,i)=>{
+    const size=Math.round(86+120*Math.sqrt(pts[k]/max)),pct=Math.round(100*hits[k]/rows.length);
+    const fs=Math.max(.9,size/90);
+    return `<div class="bub ${i<3&&pts[k]?"r"+(i+1):""}" style="width:${size}px;height:${size}px" title="${TOPICS[k].name}: ${pct}% lo tiene en su top 3">${icon(k)}<b style="font-size:${fs}rem">${TOPICS[k].name}</b><small style="font-size:${Math.max(.75,fs*.7)}rem">${pct}%</small></div>`}).join("");
+  drawCrowd(rows);
+}
+function compassFrame(){return `
+  <rect x="30" y="30" width="260" height="260" fill="var(--card)"/>
+  <g stroke="var(--ink)" stroke-width="1" opacity=".18">${[56,82,108,134,186,212,238,264].map(v=>`<line x1="${v}" y1="30" x2="${v}" y2="290"/><line x1="30" y1="${v}" x2="290" y2="${v}"/>`).join("")}</g>
+  <rect x="30" y="30" width="260" height="260" fill="none" stroke="var(--ink)" stroke-width="3"/>
+  <line x1="160" y1="30" x2="160" y2="290" stroke="var(--ink)" stroke-width="2.5"/><line x1="30" y1="160" x2="290" y2="160" stroke="var(--ink)" stroke-width="2.5"/>
+  <g font-family="Barlow Condensed, sans-serif" font-weight="700" font-size="14" fill="var(--ink)" text-anchor="middle">
+    <text x="160" y="20">Orden y tradición</text><text x="160" y="310">Libertades y cambio</text>
+    <text x="14" y="160" transform="rotate(-90 14 160)">Más Estado</text><text x="306" y="160" transform="rotate(90 306 160)">Más mercado</text></g>`}
+function drawCrowd(rows){
+  const dots=rows.map(r=>{const me=r.id===M.uid,x=160+(+r.x||0)*130,y=160-(+r.y||0)*130;
+    return `<circle cx="${x}" cy="${y}" r="${me?10:5.5}" fill="${me?"var(--pink)":"var(--yellow)"}" stroke="var(--ink)" stroke-width="${me?3:1.5}" opacity="${me?1:.85}"/>`});
+  const mine=dots.findIndex((_,i)=>rows[i].id===M.uid);
+  if(mine>-1)dots.push(dots.splice(mine,1)[0]);
+  $("#crowd").innerHTML=compassFrame()+dots.join("");
+}
+function renderOptin(){
+  const btn=$("#joinMap"),msg=$("#optinMsg");if(!btn)return;
+  if(M.off){$("#optin").closest(".win").hidden=true;return}
+  const mine=M.rows.find(r=>r.id===M.uid);
+  btn.disabled=!M.ready||!M.uid;
+  btn.textContent=mine?"Actualizar mi burbuja":"Sumarme";
+  if(mine&&!msg.dataset.touched)msg.textContent="Ya estás en el mapa. Si repetiste el test, actualizá tu burbuja.";
+}
+$("#joinMap").addEventListener("click",async()=>{
+  const r=store.get("urna-acta-v1"),msg=$("#optinMsg");msg.dataset.touched=1;
+  if(!r||!M.db||!M.uid){msg.textContent="No pudimos conectar con el mapa. Probá de nuevo en un rato.";return}
+  const btn=$("#joinMap");btn.disabled=true;
+  try{
+    await M.db.doc("mapa/"+M.uid).set({top:r.top.map(t=>t.k),x:Math.round(r.x*100)/100,y:Math.round(r.y*100)/100,dep:$("#depPick").value||"",t:Date.now()});
+    msg.textContent="¡Listo! Ya sos parte del mapa.";toast("Burbuja agregada al mapa");
+  }catch(e){msg.textContent= e&&e.code==="invalid_argument"?"Tu tipo de acceso solo permite ver el mapa, no sumarte.":"No se pudo guardar. Probá de nuevo."}
+  btn.disabled=false;renderOptin();
+});
+
+/* ======================= COMPARTIR ======================= */
+function siteUrl(){try{const u=location.origin+location.pathname;return /^https?:/.test(u)&&!/claude|usercontent/.test(u)?u:"https://mjmolinao.github.io/URNAmas/"}catch(e){return "https://mjmolinao.github.io/URNAmas/"}}
+function openShare(text){
+  const url=siteUrl(),full=text+" "+url,m=$("#shareModal");
+  $("#sharePreview").textContent=full;
+  $("#shWa").href="https://wa.me/?text="+encodeURIComponent(full);
+  $("#shX").href="https://twitter.com/intent/tweet?text="+encodeURIComponent(text)+"&url="+encodeURIComponent(url);
+  $("#shFb").href="https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(url);
+  const more=$("#shMore");more.hidden=!navigator.share;
+  more.onclick=async()=>{try{await navigator.share({title:"Mi acta URNA+",text,url})}catch(e){}};
+  $("#shCopy").onclick=async()=>{
+    let ok=false;
+    try{await navigator.clipboard.writeText(full);ok=true}catch(e){
+      try{const ta=document.createElement("textarea");ta.value=full;ta.setAttribute("readonly","");ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();ta.setSelectionRange(0,full.length);ok=document.execCommand("copy");ta.remove()}catch(e2){}
+    }
+    if(ok)toast("Copiado. Pegalo donde querás.");
+    else{const sel=window.getSelection(),rg=document.createRange();rg.selectNodeContents($("#sharePreview"));sel.removeAllRanges();sel.addRange(rg);toast("Ya está seleccionado: copialo")}
+  };
+  m.hidden=false;$("#shareClose").focus();
+}
+function closeShare(){$("#shareModal").hidden=true;$("#share").focus()}
+$("#shareClose").addEventListener("click",closeShare);
+$("#shareModal").addEventListener("click",e=>{if(e.target.id==="shareModal")closeShare()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#shareModal").hidden)closeShare()});
+
+/* ======================= RESULTS ======================= */
+function compute(){
+  const acc={x:[0,0],y:[0,0]},score={};
+  Object.keys(TOPICS).forEach(k=>score[k]={b:S.budget[k],f:0,i:0});
+  QS.forEach((q,i)=>{
+    const v=S.ans[i]??0;
+    if(q.a){acc[q.a][0]+=v*q.d;acc[q.a][1]+=2}
+    if(S.fire.has(i))score[q.t].f++;
+    if(Math.abs(v)===2)score[q.t].i++;
+  });
+  const x=acc.x[1]?acc.x[0]/acc.x[1]:0, y=acc.y[1]?acc.y[0]/acc.y[1]:0;
+  const top=Object.entries(score).map(([k,s])=>({k,...s,pts:s.b*3+s.f*2+s.i*.5})).sort((a,b)=>b.pts-a.pts||b.b-a.b).slice(0,3);
+  return {x,y,top,peek:S.peek.size,date:new Date().toISOString()};
+}
+function quadrant(x,y){
+  if(Math.abs(x)<.15&&Math.abs(y)<.15) return ["Centro: ni muy muy, ni tan tan","Tus respuestas se equilibran. Puede que pensés cada tema por separado o que todavía estés armando tu postura. Las dos cosas están bien."];
+  if(Math.abs(x)<.15) return y>0
+    ? ["Centro conservador","En economía no te casás ni con más Estado ni con más mercado, pero en lo social te inclinás por el orden, la autoridad y los valores tradicionales."]
+    : ["Centro progresista","En economía no te casás ni con más Estado ni con más mercado, pero en lo social te inclinás por las libertades individuales y el cambio."];
+  if(Math.abs(y)<.15) return x<0
+    ? ["Centroizquierda","En lo social estás en el centro, pero en economía querés un Estado que participe más para emparejar la cancha."]
+    : ["Centroderecha","En lo social estás en el centro, pero en economía confiás más en el mercado y la iniciativa privada para generar chamba."];
+  if(x<0&&y<=0) return ["Izquierda progresista","Creés que el Estado tiene que meterle mano a la economía para emparejar la cancha, y que cada quien decida sobre su propia vida. En el mundo se parece a la socialdemocracia y a los movimientos progresistas."];
+  if(x<0&&y>0)  return ["Izquierda conservadora","Querés un Estado fuerte que reparta y proteja, pero también orden, autoridad y valores tradicionales. Es una mezcla más común de lo que parece en Latinoamérica."];
+  if(x>=0&&y<=0)return ["Derecha liberal","Confiás en el mercado y en la iniciativa privada para generar chamba, y también en la libertad individual en lo personal. En el mundo se le llama liberalismo."];
+  return ["Derecha conservadora","Preferís menos Estado en la economía y más orden, autoridad y valores tradicionales en lo social. Es la combinación de muchos partidos conservadores del continente."];
+}
+function strength(v){const a=Math.abs(v);return a<.15?"en el centro":a<.45?"leve":a<.75?"clara":"fuerte"}
+function renderResults(r){
+  renderOptin();
+  const [name,desc]=quadrant(r.x,r.y);
+  const d=new Date(r.date);
+  $("#seal").innerHTML=`ACTA URNA+<br>${d.toLocaleDateString("es-GT",{day:"2-digit",month:"short",year:"numeric"})}`;
+  $("#qname").textContent=name;$("#qdesc").textContent=desc;
+  // compass
+  const cx=160,cy=160,R=130,px=cx+r.x*R,py=cy-r.y*R;
+  $("#compass").innerHTML=`
+    <rect x="30" y="30" width="130" height="130" fill="var(--pink-2)"/>
+    <rect x="160" y="30" width="130" height="130" fill="var(--yellow)" opacity=".35"/>
+    <rect x="30" y="160" width="130" height="130" fill="var(--yellow)" opacity=".18"/>
+    <rect x="160" y="160" width="130" height="130" fill="var(--pink-2)" opacity=".55"/>
+    <g stroke="var(--ink)" stroke-width="1" opacity=".25">${[56,82,108,134,186,212,238,264].map(v=>`<line x1="${v}" y1="30" x2="${v}" y2="290"/><line x1="30" y1="${v}" x2="290" y2="${v}"/>`).join("")}</g>
+    <rect x="30" y="30" width="260" height="260" fill="none" stroke="var(--ink)" stroke-width="3"/>
+    <line x1="160" y1="30" x2="160" y2="290" stroke="var(--ink)" stroke-width="2.5"/>
+    <line x1="30" y1="160" x2="290" y2="160" stroke="var(--ink)" stroke-width="2.5"/>
+    <g font-family="Barlow Condensed, sans-serif" font-weight="700" font-size="14" fill="var(--ink)" text-anchor="middle">
+      <text x="160" y="20">Orden y tradición</text><text x="160" y="310">Libertades y cambio</text>
+      <text x="14" y="160" transform="rotate(-90 14 160)">Más Estado</text><text x="306" y="160" transform="rotate(90 306 160)">Más mercado</text>
+    </g>
+    <circle cx="${px}" cy="${py}" r="26" fill="var(--pink)" opacity=".25"><animate attributeName="r" values="14;30;14" dur="2.4s" repeatCount="indefinite"/></circle>
+    <circle id="dot" cx="${reduce?px:cx}" cy="${reduce?py:cy}" r="11" fill="var(--pink)" stroke="var(--ink)" stroke-width="3"/>
+    <text x="${Math.min(268,Math.max(52,px))}" y="${py<52?py+32:py-18}" text-anchor="middle" font-family="Bebas Neue, sans-serif" font-size="20" fill="var(--ink)">VOS</text>`;
+  if(!reduce){const dot=$("#dot");let t0;const step=ts=>{t0??=ts;const k=Math.min(1,(ts-t0)/900),e=1-Math.pow(1-k,3);dot.setAttribute("cx",cx+(px-cx)*e);dot.setAttribute("cy",cy+(py-cy)*e);if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step)}
+  const bar=(l,rgt,v,what)=>{const p=Math.abs(v)*50;return `<div class="bar"><div class="lbl"><span>${l}</span><span>${rgt}</span></div><div class="track"><div class="fill" style="${v<0?`right:50%`:`left:50%`};width:${p}%"></div></div><small style="color:var(--muted)">${what}: tendencia ${strength(v)}${Math.abs(v)>=.15?` hacia ${v<0?l.toLowerCase():rgt.toLowerCase()}`:""}</small></div>`};
+  $("#bars").innerHTML=bar("Más Estado","Más mercado",r.x,"Economía")+bar("Libertades y cambio","Orden y tradición",r.y,"Sociedad");
+  $("#podium").innerHTML=r.top.map((t,i)=>{
+    const T=TOPICS[t.k],why=[];
+    if(t.b)why.push(`le metiste Q${t.b*100} millones`);
+    if(t.f)why.push(`lo marcaste como importante ${t.f} ${t.f>1?"veces":"vez"}`);
+    if(t.i)why.push(`respondiste con todo ${t.i} ${t.i>1?"veces":"vez"}`);
+    return `<div class="pod"><div class="rank">${i+1}</div><div><h3>${icon(t.k)}${T.name}</h3><p class="why">${why.length?why.join(", "):"empate técnico"}</p><b>Preguntale a cada candidatura:</b><ul>${T.ask.map(a=>`<li>${a}</li>`).join("")}</ul></div></div>`}).join("");
+  $("#learned").innerHTML= r.peek
+    ? `<p style="margin:0">Abriste <strong>${r.peek}</strong> ${r.peek>1?"explicaciones":"explicación"} de “¿Ni idea?”. Ya sabés más que mucha gente que va a votar. Eso es alfabetización política, mi cuate.</p>`
+    : `<p style="margin:0">No abriste ningún “¿Ni idea?”. O ya te las sabés todas, o te dio pena. Repetí el test y dale clic: nadie te ve.</p>`;
+  const shareTxt=`Mi acta URNA+: ${name}. Mis temas top: ${r.top.map((t,i)=>`${i+1}) ${TOPICS[t.k].name}`).join(", ")}. Hacé el test y votá con criterio.`;
+  const shareUrl=location.href.split("#")[0];
+  $("#wa").href="https://wa.me/?text="+encodeURIComponent(shareTxt+" "+shareUrl);
+  $("#share").onclick=()=>openShare(`Mi acta URNA+: ${name}.\nMis temas top: ${r.top.map((t,i)=>`${i+1}) ${TOPICS[t.k].name}`).join(", ")}.\nHacé el test y votá con criterio:`);
+
+}
+</script>
+</body>
+</html>
